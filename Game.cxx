@@ -6,19 +6,18 @@
 #include <GL\freeglut.h>
 
 Game* Game::currentInstance = nullptr;
-GLint oldX = 0;
-GLint oldY = 0;
-GLboolean boutonClick = false;
-GLdouble Ax = Param::getBoardDim("x") / 2; //coordonn�es de la cam�ra
-GLdouble Ay = 100;
-GLdouble Az = -50;
+
+GLboolean Game::boutonClick = false;
+GLint Game::oldX = -1;
+GLint Game::oldY = -1;
+GLboolean Game::championDrag = false;
+GLdouble Game::Ax = Param::getBoardDim("x") / 2; //coordonn�es de la cam�ra
+GLdouble Game::Ay = 100;
+GLdouble Game::Az = -50;
 
 Game::Game(){
   board = new Board();
   currentInstance = this;
-
-  gold = 10; //ATTETION à mettre dans Param
-  round = 1;
 }
 
 Game::~Game(){
@@ -97,36 +96,38 @@ void Game::clavier(unsigned char key, int xx, int yy){
   }
 }
 
-GLvoid souris(int bouton, int etat, int x, int y) {
+GLvoid Game::souris(int bouton, int etat, int x, int y) {
 	// Test pour voir si le bouton gauche de la souris est appuy�
    //TODO
-	if (bouton == GLUT_LEFT_BUTTON && etat == GLUT_DOWN) {
-		boutonClick = true;
-		oldX = x;
-		oldY = y;
-	}
-	// si on relache le bouton gauche
-	// TODO
-	if (bouton == GLUT_LEFT_BUTTON && etat == GLUT_UP) {
-		boutonClick = false;
-		oldX = 0;
-		oldY = 0;
+	if (bouton == GLUT_LEFT_BUTTON) {
+    if (etat == GLUT_DOWN){
+      boutonClick = true;
+  		oldX = x;
+  		oldY = y;
+    }
+    else { //if (etat == GLUT_UP)
+      // si on relache le bouton gauche
+      // TODO
+  		boutonClick = false;
+  		oldX = -1;
+  		oldY = -1;
+  	}
 	}
 }
 
-GLvoid deplacementSouris(int x, int y) {
-	// si le bouton gauche est appuye et qu'on se deplace
+GLvoid Game::deplacementSouris(int x, int y) {
+	/*// si le bouton gauche est appuye et qu'on se deplace
 	// alors on doit modifier les angles de rotations du cube
 	// en fonction de la derniere position de la souris
 	// et de sa position actuelle
-	if (boutonClick /*&& test pour voir si x et y correspondent � une partie du HUD*/) {
+	if (boutonClick && x==0 && y==0) {  //&& test pour voir si x et y correspondent à une partie du HUD
 
 	}
-	else { //si on ne clique pas sur le HUD, on test si on s�lectionne un champion sur le board
-		//Projection des coordonn�es de la souris sur le plan du board
-		GLdouble Bx, By, Bz; //coordon�es de a souris sur le plan de l'�cran
+	else if (boutonClick){ //si on ne clique pas sur le HUD, on test si on sélectionne un champion sur le board
+		//Projection des coordonnées de la souris sur le plan du board
+		GLdouble Bx, By, Bz; //coordon�es de a souris sur le plan de l'écran
 		GLdouble Mx, My, Mz, t; //point d'intersection du 'rayon' de la souris et du plan du board
-
+    Bx = x;
 		GLint viewport[4];
 		GLdouble mvmatrix[16], projmatrix[16];
 		glGetDoublev(GL_MODELVIEW_MATRIX, mvmatrix);
@@ -138,19 +139,27 @@ GLvoid deplacementSouris(int x, int y) {
 		Mx = t * (Bx - Ax) + Ax; //on calcule les positions de M  avec t
 		My = 0;
 		Mz = t * (Bz - Az) + Az;
-		float case_i = abs(Mx / (Param::dimCase + 2*Param::borderSpacingCase));
-		float case_j = abs(Mz / (Param::dimCase + 2*Param::borderSpacingCase));
-		if (0 < case_i && 0 < case_j && case_i < Param::nbColumns && case_j < Param::nbRows) {
-			Champion* champ = Board::findChampion(case_i, case_j); //on trouve le champion qui est sur la case qu'on vise
-			if (champ != nullptr) {
-				champ->dragndrop(x, y);
-			}
-		}
+		int case_i = (int)(Mx / (Param::dimCase + 2*Param::borderSpacingCase));
+		int case_j = (int)(Mz / (Param::dimCase + 2*Param::borderSpacingCase));
+    Champion* champ = board->findChampion(case_i, case_j); //on trouve le champion qui est sur la case qu'on vise
+    if (!championDrag){
+      if (0 < case_i && 0 < case_j && case_i < Param::nbColumns && case_j < Param::nbRows) {
+    		if (champ != nullptr) {
+    			champ->dragndrop(x, y);
+          championDrag = true;
+          glutPostRedisplay();
+    		}
+      }
+    }
+
+      else{
+
+      }
 	}
 
 	// Appeler le re-affichage de la scene OpenGL
 	glutPostRedisplay();
-}
+*/}
 
 void Game::run(){
 

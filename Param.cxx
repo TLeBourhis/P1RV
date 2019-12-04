@@ -11,6 +11,8 @@ int const Param::nbColumns = 10;
 int const Param::dimCase = 10;
 int const Param::borderSpacingCase = 2;
 float const Param::caseColor[3] = {0.5f,0.5f,0.5f};
+float Param::championColor[4] = {1.0f, 0.0f, 0.0f, 1.0f};
+float Param::monsterColor[4] = {0.0f, 1.0f, 0.0f, 1.0f};;
 int const Param::nbCardsOnPick = 5; //Nombre de cartes piochées par tour
 float const Param::percentageWidthTakenByCardsPick = 0.8;
 

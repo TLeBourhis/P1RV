@@ -25,25 +25,25 @@ protected:
   int caseID; //?
   float color[4];
 
-
   float distance(Character * c) const;
 
 public:
   virtual void fight(std::list<Character*> allies, std::list<Character*> ennemies) = 0;
   virtual void display() const{};
+  virtual void setColor(){};
 
   virtual void move(Character *target){}; //Utilisé lors des combats
 
-  virtual int die(){};
+  virtual int die(){return 0;};
 
-  void moveTo(int _x, int _y){}; //Utilisé pour le dragndrop
   void getHit(int damage, std::string type);
+  void moveTo(int _x, int _y); //Utilisé pour le dragndrop
 
   bool isAlive(){return alive;};
 
 
   //Constructeurs
-  Character(std::string _name, int _armor, int _magicResistance, float _spellPower, int _attackRange, float _attackSpeed, int _health, int _attackDamage, int _x, int _y, int _caseID/*, float _color[4]*/);
+  Character(std::string _name, int _armor, int _magicResistance, float _spellPower, int _attackRange, float _attackSpeed, int _health, int _attackDamage, int _i, int _j, int _caseID );
 
   //Destructeur
   virtual ~Character(){};

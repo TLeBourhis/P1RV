@@ -1,6 +1,7 @@
 #include "Board.h"
 #include "Param.h"
 #include "Champion.h"
+#include "Monster.h"
 #include <list>
 #include <iterator>
 #include <GL\glew.h>
@@ -9,10 +10,11 @@ using namespace std;
 
 
 Board::Board(){
-  champions.push_back(new Champion("PE",0,0,0,0,0,0,0,5,5,0,0,0));
-  champions.push_back(new Champion("PE",0,0,0,0,0,0,0,5,6,0,0,0));
-  champions.push_back(new Champion("PE",0,0,0,0,0,0,0,1,2,0,0,0));
-  champions.push_back(new Champion("PE",0,0,0,0,0,0,0,9,3,0,0,0));
+  champions.push_back(new Champion("PE",0,0,0,0,0,0,0,6,1,0,0,0));
+  champions.push_back(new Champion("PE",0,0,0,0,0,0,0,5,1,0,0,0));
+  champions.push_back(new Champion("PE",0,0,0,0,0,0,0,1,1,0,0,0));
+  champions.push_back(new Champion("PE",0,0,0,0,0,0,0,9,1,0,0,0));
+  monsters.push_back(new Monster("Esteban",0,0,0,0,0,0,0,5,8,0,0,0));
 }
 
 void Board::resetMonsters(){
@@ -38,47 +40,7 @@ Champion* Board::findChampion(int _i, int _j) {
 }
 
 bool Board::fight(){
-  //Gère le fight sur le board lors d'un round
-  bool win = false;
-  list<Champion*> fightingChampions = new list<Champion*>(champions);
-  list<Monster*> fightingMonsters = new list<Monster*>(monsters);
-
-  while(fightingChampions.isEmpty() == false && fightingMonster.isEmpty() == false){
-    //Tant que l'un des camps n'est pas décédé on les fait se combattre
-
-    for(list<Champion*>::iterator it = fightingChampions.begin(); it != fightingChampions.end(); it++){
-      (*it)->fight(fightingChampions,fightingMonsters);
-    }
-
-    for(list<Monster*>::iterator it = fightingMonsters.begin(); it != fightingMonsters.end(); it++){
-      (*it)->fight(fightingMonsters,fightingChampions);
-    }
-
-    //On supprime de la liste les champions qui sont morts
-    list<Champion*> newFightingChampions = new list<Champion*>();
-    for(list<Champion*>::iterator it = fightingChampions.begin(); it != fightingChampions.end(); it++){
-      if((*it)->isAlive() == false){
-        newFightingChampions.push_back(*it);
-      }
-    }
-    fightingChampions = newFightingChampions;
-
-    //On supprime de la liste les Monsters qui sont morts
-    list<Monster*> newFightingMonsters = new list<Monster*>();
-    for(list<Monster*>::iterator it = fightingMonsters.begin(); it != fightingMonsters.end(); it++){
-      if((*it)->isAlive() == false){
-        newFightingMonsters.push_back(*it);
-      }
-    }
-    fightingMonsters = newFightingMonsters;
-  }
-
-  //Vérification de la victoire
-  win = !fightingChampions.isEmpty();
-
-  //ATTENTION : gestion du gain ici ou ailleurs ?
-
-  return win;
+  return true;
 }
 
 
@@ -122,12 +84,9 @@ GLvoid Board::display(){
     (*it)->display();
   }
 
+  for (list<Monster*>::iterator it = monsters.begin(); it!=monsters.end(); it++){
+    (*it)->display();
+  }
+
   glutSwapBuffers();
-}
-
-
-
-
-void Board::removeChampion(int indice){
-    
 }

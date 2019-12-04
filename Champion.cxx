@@ -7,10 +7,12 @@
 
 using namespace std;
 
-Champion::Champion(string _name, int _armor, int _magicResistance, float _spellPower, int _attackRange, float _attackSpeed, int _health, int _attackDamage, int _i, int _j, int _caseID/*, float _color[4]*/, int _level, /*Race *_races[2],*/ int _cost) : Character(_name, _armor, _magicResistance, _spellPower, _attackRange, _attackSpeed, _health, _attackDamage, _i, _j, _caseID/*, _color*/){
+Champion::Champion(string _name, int _armor, int _magicResistance, float _spellPower, int _attackRange, float _attackSpeed, int _health, int _attackDamage, int _i, int _j, int _caseID, int _level, /*Race *_races[2],*/ int _cost) : Character(_name, _armor, _magicResistance, _spellPower, _attackRange, _attackSpeed, _health, _attackDamage, _i, _j, _caseID){
   level = _level;
   //races = _races;
   cost = _cost;
+  setColor();
+
 }
 
 
@@ -25,35 +27,6 @@ Champion::~Champion(){
 void Champion::fight(list<Character*> allies, list<Character*> ennemies){
   //Gère les actions du champion lors du combat.
 
-
-  if(size(ennemies) == 0){
-    //Si pas d'ennemi
-
-
-  }else{
-    //Récupération de l'ennemi le plus proche
-    float distMin = this->distance(*ennemies.begin());
-    Character * nearestEnnemy = *ennemies.begin();
-    for(list<Character*>::iterator it = ennemies.begin(); it != ennemies.end(); ++it){
-      float d = this->distance(*it);
-      if(d < distMin){
-        distMin = d;
-        nearestEnnemy = *it;
-      }
-    }
-
-
-
-
-    if(distMin > attackRange){
-      //L'ennemi est en-dehors de la range d'attaque
-      //Déplacement vers l'ennemi le plus proche
-      this->move(nearestEnnemy);
-    }else{
-      //Attaque de l'ennemi
-      nearestEnnemy->getHit(attackDamage,"ATTACK_DAMAGE");
-    }
-  }
 }
 
 
@@ -93,7 +66,7 @@ int Champion::buy(){
 
 int Champion::sell(){
 
-  return cost*level;
+  return cost;//ATTENTION : Changer le cost du champion évolué pour la vente
 }
 
 
@@ -113,13 +86,15 @@ void Champion::display() const{
   glPopMatrix();
 }
 
+void Champion::move(int _x, int _y){
 
+}
 
 void Champion::move(Character *target){
 
 }
 
 int Champion::die(){
-  this->alive = false;
-  return 0;
+	this -> alive = false;
+	return 0;
 }

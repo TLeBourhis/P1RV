@@ -1,16 +1,16 @@
 #include <list>
 #include "Champion.h"
+#include "Monster.h"
 #include <GL\glew.h>
 #include <GL\freeglut.h>
-#include "Monster.h"
-#include "pch.h"
 #ifndef BOARD_H
 #define BOARD_H
 
 class Board{
 private:
   std::list<Champion*> champions;
-  std::list<Monster> monsters;
+  std::list<Monster*> monsters;
+  //std::list<Monster> monsters;
 
 public:
   void resetMonsters();

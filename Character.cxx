@@ -1,55 +1,40 @@
 #include "Character.h"
-#include <string>
-#include <cmath>
+#include "Race.h"
+#include "Param.h"
+#include <list>
 
-using namespace std;
+#ifndef CHAMPION_H
+#define CHAMPION_H
 
-int Character::staticID = 0;
+class Champion : public Character{
+private:
+  int level;
+  //Race *races[2];
+  int cost;
 
-Character::Character(std::string _name, int _armor, int _magicResistance, float _spellPower, int _attackRange, float _attackSpeed, int _health, int _attackDamage, int _i, int _j, int _caseID/*, float _color[4]*/){
-  staticID++;
-  id = staticID;
-
-  name = _name;
-  armor = _armor;
-  magicResistance = _magicResistance;
-  spellPower = _spellPower;
-  attackRange = _attackRange;
-  attackSpeed = _attackSpeed;
-  alive = true;
-  health = _health;
-  attackDamage = _attackDamage;
-  i = _i;
-  j = _j;
-  caseID = _caseID;
-  color[0] = 1.0f;
-  color[1] = 0.0f;
-  color[2] = 0.0f;
-  color[3] = 1.0f;
-  //color = _color;
-}
+public:
+  virtual void display() const;
+  void fight(std::list<Character*> allies, std::list<Character*> ennemies);
+  void displayCard(int i) const;
+  void evolve();
+  void dragndrop(int _x, int _y);
+  int buy();
+  int sell();
+  void move(int _x, int _y);
+  void move(Character *target);
+  int die();
+  void setColor(){color[0] = Param::championColor[0]; color[1] = Param::championColor[1]; color[2] = Param::championColor[2]; color[3] = Param::championColor[3];};
+  //void spell(Monster *monster);
 
 
-void Character::getHit(int damage, string type){
-  if(type == "ATTACK_DAMAGE"){
-    health -= (damage - armor);
-    if(health <= 0){
-      this->die();
-    }
-  }else{
-    health -= (damage - magicResistance);
-    if(health <= 0){
-      this->die();
-    }
-  }
-}
 
+  //Constructeurs
+  Champion(std::string _name, int _armor, int _magicResistance, float _spellPower, int _attackRange, float _attackSpeed, int _health, int _attackDamage, int _i, int _j, int _caseID, int _level, /*Race _races[2],*/ int cost);
 
-float Character::distance(Character * c) const{
-  return sqrt(pow(c->getX()-this->getX(),2) + pow(c->getY()-this->getY(),2));
-}
+  //Destructeur
+  ~Champion();
 
-void Character::moveTo(int _x, int _y){
-  this->x = _x;
-  this->y = _y;
-}
+  //Accesseurs
+};
+
+#endif /* end of include guard: CHAMPION_H */

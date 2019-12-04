@@ -1,5 +1,6 @@
 #include "Character.h"
 #include "Race.h"
+#include "Param.h"
 #include <list>
 
 #ifndef CHAMPION_H
@@ -19,14 +20,16 @@ public:
   void dragndrop(int _x, int _y);
   int buy();
   int sell();
+  void move(int _x, int _y);
   void move(Character *target);
   int die();
+  void setColor(){color[0] = Param::championColor[0]; color[1] = Param::championColor[1]; color[2] = Param::championColor[2]; color[3] = Param::championColor[3];};
   //void spell(Monster *monster);
 
 
 
   //Constructeurs
-  Champion(std::string _name, int _armor, int _magicResistance, float _spellPower, int _attackRange, float _attackSpeed, int _health, int _attackDamage, int _i, int _j, int _caseID/*, float _color[4]*/, int _level, /*Race _races[2],*/ int cost);
+  Champion(std::string _name, int _armor, int _magicResistance, float _spellPower, int _attackRange, float _attackSpeed, int _health, int _attackDamage, int _i, int _j, int _caseID, int _level, /*Race _races[2],*/ int cost);
 
   //Destructeur
   ~Champion();

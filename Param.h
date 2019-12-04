@@ -17,6 +17,8 @@ public:
   static const int nbCardsOnPick;
   static const int cardsHeight;
   static const float percentageWidthTakenByCardsPick;
+  static float championColor[4];
+  static float monsterColor[4];
 
 
   static int getBoardDim(std::string coordonnee);

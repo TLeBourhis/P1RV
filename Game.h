@@ -24,6 +24,7 @@ private:
 
   GLvoid display();
   GLvoid displayHUD();
+  GLvoid drawText(float x, float y, int length, const char *text);
 
 public:
     static GLvoid displayCallBack();

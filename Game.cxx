@@ -4,6 +4,7 @@
 #include "Champion.h"
 #include <GL\glew.h>
 #include <GL\freeglut.h>
+#include <string>
 
 Game* Game::currentInstance = nullptr;
 
@@ -29,26 +30,48 @@ Game::~Game(){
 GLvoid Game::display(){
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   board->display();
-  //this->displayHUD();
+  this->displayHUD();
+  std::string text = "Oh regarde le beau rectangle rouge que jpeux dessiner";
+  this -> drawText(400.0f, 900.0f, text.size(), text.data());
+  glutSwapBuffers();
+}
+
+GLvoid Game::drawText(float x, float y, int length, const char *text){
+  glMatrixMode(GL_PROJECTION);
+  glPushMatrix();
+  glLoadIdentity();
+  gluOrtho2D(0.0f, Param::windowWidth, 0.0f, Param::windowHeight);
+  glMatrixMode(GL_MODELVIEW);
+  glPushMatrix();
+  glLoadIdentity();
+   glColor3f(1.0f, 1.0f, 1.0f);
+  glRasterPos2f(x, y);
+  for (int i = 0; i<length; i++) {
+      glutBitmapCharacter(GLUT_BITMAP_9_BY_15, (int)text[i]);
+  }
+  glMatrixMode(GL_PROJECTION);
+  glPopMatrix();
+  glMatrixMode(GL_MODELVIEW);
+  glPopMatrix();
 }
 
 GLvoid Game::displayHUD(){
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity();
-  glOrtho(0.0f, Param::windowWidth, 0.0f, Param::windowHeight, 1.0f, -1.0f);
+  gluOrtho2D(0.0f, Param::windowWidth, 0.0f, Param::windowHeight);
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
   glLoadIdentity();
   glColor3f(1,0,0);
     glBegin(GL_QUADS);
-      glVertex3f(0.0f,100.0f,0.0f);
-      glVertex3f(0.0f,0.0f,0.0f);
-      glVertex3f(100.0f,0.0f,0.0f);
-      glVertex3f(100.0f,100.0f,0.0f);
+      glVertex2f(50.0f,950.0f);
+      glVertex2f(50.0f,850.0f);
+      glVertex2f(300.0f,850.0f);
+      glVertex2f(300.0f,950.0f);
   glEnd();
   glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
+  glPopMatrix();
   glMatrixMode(GL_MODELVIEW);
   glPopMatrix();
 }

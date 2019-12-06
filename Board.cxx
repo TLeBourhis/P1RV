@@ -87,6 +87,4 @@ GLvoid Board::display(){
   for (list<Monster*>::iterator it = monsters.begin(); it!=monsters.end(); it++){
     (*it)->display();
   }
-
-  glutSwapBuffers();
 }

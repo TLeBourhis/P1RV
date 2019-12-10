@@ -5,6 +5,13 @@
 #include <GL\glew.h>
 #include <GL\freeglut.h>
 #include <string>
+#include <list>
+#include <iterator>
+#include <stdlib.h>
+#include <time.h>
+#include <iostream>
+
+using namespace std;
 
 Game* Game::currentInstance = nullptr;
 
@@ -31,8 +38,8 @@ GLvoid Game::display(){
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   board->display();
   this->displayHUD();
-  std::string text = "Oh regarde le beau rectangle rouge que jpeux dessiner";
-  this -> drawText(400.0f, 900.0f, text.size(), text.data());
+  this->displayCards();
+  this->displayInfo();
   glutSwapBuffers();
 }
 
@@ -55,7 +62,8 @@ GLvoid Game::drawText(float x, float y, int length, const char *text){
   glPopMatrix();
 }
 
-GLvoid Game::displayHUD(){
+GLvoid Game::displayCards(){
+	
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity();
@@ -63,17 +71,51 @@ GLvoid Game::displayHUD(){
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
   glLoadIdentity();
-  glColor3f(1,0,0);
-    glBegin(GL_QUADS);
-      glVertex2f(50.0f,950.0f);
-      glVertex2f(50.0f,850.0f);
-      glVertex2f(300.0f,850.0f);
-      glVertex2f(300.0f,950.0f);
-  glEnd();
+
+  glDisable(GL_DEPTH_TEST);			// à enlever puis remettre pour afficher le texte par dessus la carte
+
+  list<Champion*>::iterator it = championCards.begin();
+  for (int k = 0; k < 5; k++) { //affichage des 5 cartes de champion
+	  if ((*it) != nullptr) {
+		  glColor3f(0.8f, 0.8f, 0.8f);
+		  glBegin(GL_QUADS);					//affichage de la carte
+		  glVertex2f(50.0f + k * 170, 250.0f);
+		  glVertex2f(50.0f + k * 170, 50.0f);
+		  glVertex2f(200.0f + k * 170, 50.0f);
+		  glVertex2f(200.0f + k * 170, 250.0f);
+		  glEnd();
+
+		  glColor3f(0.0f, 0.0f, 0.0f);
+		  string cardText = (*it)->getName();				//affichage du texte de la carte
+		  glRasterPos2f(65.0f + k * 170, 200.0f);
+		  for (int i = 0; i < cardText.size(); i++) {
+			  glutBitmapCharacter(GLUT_BITMAP_9_BY_15, (int)cardText.data()[i]);
+		  }
+	  }
+	  advance(it, 1);
+  }
+
+  glEnable(GL_DEPTH_TEST);
+
   glMatrixMode(GL_PROJECTION);
   glPopMatrix();
   glMatrixMode(GL_MODELVIEW);
   glPopMatrix();
+  
+}
+
+GLvoid Game::displayInfo() {
+	std::string goldText = "Gold : ";
+	goldText += std::to_string(getGold());
+	drawText(50.0f, 900.0f, goldText.size(), goldText.data());
+	std::string roundText = "Round : ";
+	roundText += std::to_string(getRound());
+	this->drawText(50.0f, 930.0f, roundText.size(), roundText.data());
+}
+
+GLvoid Game::displayHUD(){
+  displayInfo();
+  displayCards();
 }
 
 GLvoid Game::displayCallBack(){
@@ -139,14 +181,23 @@ GLvoid Game::souris(int bouton, int etat, int x, int y) {
 }
 
 GLvoid Game::deplacementSouris(int x, int y) {
-	/*// si le bouton gauche est appuye et qu'on se deplace
+	// si le bouton gauche est appuye et qu'on se deplace
 	// alors on doit modifier les angles de rotations du cube
 	// en fonction de la derniere position de la souris
 	// et de sa position actuelle
-	if (boutonClick && x==0 && y==0) {  //&& test pour voir si x et y correspondent à une partie du HUD
-
+	if (boutonClick && y > 643) {  //&& test pour voir si x et y correspondent à une partie du HUD
+					//643 c'est une valeur prise empiriquement en étudiant la position de la souris
+		int selec = currentInstance -> selectionCards(x, y);
+		if (selec >= 0) {
+			list<Champion*>::iterator itr = currentInstance->championCards.begin();
+			advance(itr, selec);
+			if ((*itr) != nullptr) {
+				currentInstance->board->addChampion(*itr);
+				(*itr) = nullptr;
+			}
+		}
 	}
-	else if (boutonClick){ //si on ne clique pas sur le HUD, on test si on sélectionne un champion sur le board
+	/*else if (boutonClick){ //si on ne clique pas sur le HUD, on test si on sélectionne un champion sur le board
 		//Projection des coordonnées de la souris sur le plan du board
 		GLdouble Bx, By, Bz; //coordon�es de a souris sur le plan de l'écran
 		GLdouble Mx, My, Mz, t; //point d'intersection du 'rayon' de la souris et du plan du board
@@ -183,6 +234,35 @@ GLvoid Game::deplacementSouris(int x, int y) {
 	// Appeler le re-affichage de la scene OpenGL
 	glutPostRedisplay();
 */}
+
+void Game::initChampions(){
+	champions.push_back(new Champion("PE", 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0));
+	champions.push_back(new Champion("Thomas", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+}
+
+void Game::setCards() {
+	list<Champion*>::iterator it;
+	srand(time(NULL));
+	int r;
+	for (int k = 0; k < 5; k++) {
+		r = rand() % 2;
+		it = champions.begin();
+		advance(it, r);
+		championCards.push_back(*it);
+	}
+}
+
+int Game::selectionCards(int x, int y) {
+	int k = -1;
+	if (x > 50 && y < 843) {
+		int i = (int)((x - 50) / 170);		//indice de la carte
+		int j = x - 50 - i * 170;		//permet de vérifier si on est sur la carte ou à coté
+		if (j < 150) {
+			k = i;
+		}
+	}
+	return k;
+}
 
 void Game::run(){
 

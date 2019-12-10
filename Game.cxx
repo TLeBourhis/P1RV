@@ -5,6 +5,10 @@
 #include <GL\glew.h>
 #include <GL\freeglut.h>
 #include <string>
+#include <list>
+#include <iterator>
+#include <stdlib.h>
+#include <time.h>
 
 Game* Game::currentInstance = nullptr;
 

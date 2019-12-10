@@ -10,10 +10,6 @@ using namespace std;
 
 
 Board::Board(){
-  champions.push_back(new Champion("PE",0,0,0,0,0,0,0,6,1,0,0,0));
-  champions.push_back(new Champion("PE",0,0,0,0,0,0,0,5,1,0,0,0));
-  champions.push_back(new Champion("PE",0,0,0,0,0,0,0,1,1,0,0,0));
-  champions.push_back(new Champion("PE",0,0,0,0,0,0,0,9,1,0,0,0));
   monsters.push_back(new Monster("Esteban",0,0,0,0,0,0,0,5,8,0,0,0));
 }
 
@@ -22,7 +18,7 @@ void Board::resetMonsters(){
 }
 
 void Board::addChampion(Champion * champion){
-
+  champions.push_back(champion);
 }
 
 void Board::removeChampion(int indice){

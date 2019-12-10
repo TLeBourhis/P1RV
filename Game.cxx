@@ -13,6 +13,7 @@
 
 using namespace std;
 
+
 Game* Game::currentInstance = nullptr;
 
 GLboolean Game::boutonClick = false;

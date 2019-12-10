@@ -9,6 +9,8 @@ using namespace std;
 
 int main(int argc, char** argv){
   Game * game = new Game();
+  game->initChampions();
+  game->setCards();
 
   // Initialisation de GLUT
   glutInit(&argc, argv);
@@ -38,6 +40,9 @@ int main(int argc, char** argv){
 
   // Declaration des callbacks clavier
   glutKeyboardFunc(Game::clavier);
+  // Nouveaux callbacks
+  glutMouseFunc(Game::souris);
+  glutMotionFunc(Game::deplacementSouris);
 
   glutMainLoop();
 

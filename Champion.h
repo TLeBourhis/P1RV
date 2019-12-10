@@ -35,6 +35,7 @@ public:
   ~Champion();
 
   //Accesseurs
+  std::string getName() { return name; };
 };
 
 #endif /* end of include guard: CHAMPION_H */

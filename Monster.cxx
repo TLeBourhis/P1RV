@@ -3,6 +3,10 @@
 #include <string>
 #include <GL\glew.h>
 #include <GL\freeglut.h>
+#include "Game.h"
+#include "Graph.h"
+#include <thread>
+#include <chrono>
 
 using namespace std;
 
@@ -13,43 +17,49 @@ Monster::Monster(string _name, int _armor, int _magicResistance, float _spellPow
 }
 
 void Monster::fight(list<Character*> allies, list<Character*> ennemies){
-  //Gère les actions du champion lors du combat.
+
+	this_thread::sleep_for(chrono::milliseconds(Param::sleepTime));
+	//Gère les actions du champion lors du combat.
 
 
-  if(ennemies.size() == 0){
-    //Si pas d'ennemi
+	if (size(ennemies) == 0) {
+		//Si pas d'ennemi
 
 
-  }else{
-    //Récupération de l'ennemi le plus proche
-    float distMin = this->distance(*ennemies.begin());
-    Character * nearestEnnemy = *ennemies.begin();
-    for(list<Character*>::iterator it = ennemies.begin(); it != ennemies.end(); ++it){
-      float d = this->distance(*it);
-      if(d < distMin){
-        distMin = d;
-        nearestEnnemy = *it;
-      }
-    }
+	}
+	else {
+		//Récupération de l'ennemi le plus proche
+		float distMin = this->distance(*ennemies.begin());
+		Character * nearestEnnemy = *ennemies.begin();
+		for (list<Character*>::iterator it = ennemies.begin(); it != ennemies.end(); ++it) {
+			float d = this->distance(*it);
+			if (d < distMin) {
+				distMin = d;
+				nearestEnnemy = *it;
+			}
+		}
 
 
 
 
-    if(distMin > attackRange){
-      //L'ennemi est en-dehors de la range d'attaque
-      //Déplacement vers l'ennemi le plus proche
-      this->move(nearestEnnemy);
-    }else{
-      //Attaque de l'ennemi
-      if(rage == 100){
-        rage = 0;
-        this->boostedAttack(nearestEnnemy);
-      }else{
-        nearestEnnemy->getHit(attackDamage,"ATTACK_DAMAGE");
-        rage += 10; //ATTENTION : Mettre se paramètre d'augmentation de rage dans Param
-      }
-    }
-  }
+		if (distMin > attackRange) {
+			//L'ennemi est en-dehors de la range d'attaque
+			//Déplacement vers l'ennemi le plus proche
+			this->move(nearestEnnemy);
+		}
+		else {
+			//Attaque de l'ennemi
+			if (rage == Param::maxRage) {
+				rage = 0;
+				this->boostedAttack(nearestEnnemy);
+			}
+			else {
+				nearestEnnemy->getHit(attackDamage, "ATTACK_DAMAGE");
+				rage += Param::rageByHit;
+			}
+		}
+	}
+	
 }
 
 void Monster::boostedAttack(Character *champion) const{
@@ -65,20 +75,37 @@ int Monster::die(){
 }
 
 void Monster::move(Character *target){
+	//Calcul du chemin le plus rapide
+	list<NodeGraph*> path = Game::currentInstance->getBoard()->getShorterPath(i, j, target);
 
+	if (path.empty()) {
+
+	}
+	else {
+		NodeGraph * nextNode = *path.begin();
+
+		i = nextNode->getI();
+		j = nextNode->getJ();
+	}
 };
 
 void Monster::display() const{
-  glMatrixMode(GL_MODELVIEW);
+	if (alive) {
+		glMatrixMode(GL_MODELVIEW);
 
-  glPushMatrix();
+		glPushMatrix();
 
-  glLoadIdentity();
+		glLoadIdentity();
 
-  glColor4f(color[0],color[1],color[2],color[3]);
+		glColor4f(color[0], color[1], color[2], color[3]);
 
-  glTranslatef(i*(2*Param::borderSpacingCase+Param::dimCase)+Param::borderSpacingCase+Param::dimCase/2, 4.0f, j*(2*Param::borderSpacingCase+Param::dimCase)+Param::borderSpacingCase+Param::dimCase/2);
-  glutSolidSphere(4.0f,20,20);
+		glTranslatef(i*(2 * Param::borderSpacingCase + Param::dimCase) + Param::borderSpacingCase + Param::dimCase / 2, 4.0f, j*(2 * Param::borderSpacingCase + Param::dimCase) + Param::borderSpacingCase + Param::dimCase / 2);
+		float rayon = (float)health / (float)maxHealth * 4 + 1;
 
-  glPopMatrix();
+
+
+		glutSolidSphere(rayon, 20, 20);
+
+		glPopMatrix();
+	}
 };

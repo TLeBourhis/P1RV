@@ -1,8 +1,10 @@
+#ifndef CHARACTER_H
+#define CHARACTER_H
+
+
 #include <string>
 #include <list>
 
-#ifndef CHARACTER_H
-#define CHARACTER_H
 
 class Character{
 protected:
@@ -19,6 +21,7 @@ protected:
   float attackSpeed;
   bool alive;
   int health;
+  int maxHealth;
   int attackDamage;
   int i;
   int j;
@@ -31,6 +34,7 @@ public:
   virtual void fight(std::list<Character*> allies, std::list<Character*> ennemies) = 0;
   virtual void display() const{};
   virtual void setColor(){};
+  virtual void reset(int _i, int _j);
 
   virtual void move(Character *target){}; //Utilisé lors des combats
 
@@ -51,6 +55,7 @@ public:
   //Accesseurs
   int getI() { return i; };
   int getJ() { return j; };
+  void setIJ(int _i, int _j) { i = _i; j = _j; };
 
 };
 

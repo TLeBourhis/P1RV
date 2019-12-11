@@ -1,16 +1,20 @@
-#include "headers/Game.h"
-#include "headers/Param.h"
+#include "Game.h"
+#include "Param.h"
 #include <GL/gl.h>
 #include <GL/glut.h>
 #include <string>
+#include <thread>
 using namespace std;
 
+void run(Game * game) {
+	game->run();
+}
 
 
 int main(int argc, char** argv){
   Game * game = new Game();
-  game->initChampions();
-  game->setCards();
+  
+  thread v(run, game);
 
   // Initialisation de GLUT
   glutInit(&argc, argv);
@@ -50,3 +54,6 @@ int main(int argc, char** argv){
 
   return 1;
 }
+
+
+

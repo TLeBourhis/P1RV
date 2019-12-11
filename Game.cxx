@@ -89,15 +89,15 @@ GLvoid Game::displayCards() {
 		if ((*it) != nullptr) {
 			glColor3f(0.8f, 0.8f, 0.8f);
 			glBegin(GL_QUADS);					//affichage de la carte
-			glVertex2f(50.0f + k * 170, 250.0f);
-			glVertex2f(50.0f + k * 170, 50.0f);
-			glVertex2f(200.0f + k * 170, 50.0f);
-			glVertex2f(200.0f + k * 170, 250.0f);
+			glVertex2f(50.0f + k * space, Param::cardHeightUp);
+		  	glVertex2f(50.0f + k * space, Param::cardHeightDown);
+		  	glVertex2f(200.0f + k * space, Param::cardHeightDown);
+		  	glVertex2f(200.0f + k * space, Param::cardHeightUp);
 			glEnd();
 
 			glColor3f(0.0f, 0.0f, 0.0f);
 			string cardText = (*it)->getName();				//affichage du texte de la carte
-			glRasterPos2f(65.0f + k * 170, 200.0f);
+			glRasterPos2f(65.0f + k * space, 200.0f);
 			for (int i = 0; i < cardText.size(); i++) {
 				glutBitmapCharacter(GLUT_BITMAP_9_BY_15, (int)cardText.data()[i]);
 			}
@@ -290,10 +290,10 @@ void Game::setCards() {
 
 int Game::selectionCards(int x, int y) {
 	int k = -1;
-	if (x > 50 && y < 843) {
-		int i = (int)((x - 50) / 170);		//indice de la carte
-		int j = x - 50 - i * 170;		//permet de vérifier si on est sur la carte ou à coté
-		if (j < 150) {
+	if (x > 50 && y < Param::windowHeight - Param::cardHeightDown) {
+		int i = (int)((x - 50) / (Param::cardWidth + Param::cardSpace));		//indice de la carte
+		int j = x - 50 - i * (Param::cardWidth + Param::cardSpace);		//permet de vérifier si on est sur la carte ou à coté
+		if (j < Param::cardWidth) {
 			k = i;
 		}
 	}

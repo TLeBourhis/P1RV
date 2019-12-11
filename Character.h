@@ -23,6 +23,8 @@ protected:
   int health;
   int maxHealth;
   int attackDamage;
+  float x;
+  float y;
   int i;
   int j;
   int caseID; //?
@@ -53,8 +55,12 @@ public:
   virtual ~Character(){};
 
   //Accesseurs
+  int getX() { return x; };
+  int getY() { return y; };
   int getI() { return i; };
   int getJ() { return j; };
+  void setX(int _x) { x = _x; };
+  void setY(int _y) { y = _y; };
   void setIJ(int _i, int _j) { i = _i; j = _j; };
 
 };

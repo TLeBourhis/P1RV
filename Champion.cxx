@@ -104,12 +104,6 @@ void Champion::evolve(){
 
 }
 
-void Champion::dragndrop(int _x, int _y){
-  //Gère le piquer/déplacer du champion suite à l'action de l'utilisateur
-	i = abs(_x / (Param::dimCase + 2 * Param::borderSpacingCase));
-	j = abs(_y / (Param::dimCase + 2 * Param::borderSpacingCase));
-}
-
 int Champion::buy(){
 
   return -cost;
@@ -143,8 +137,9 @@ void Champion::display() const{
 	}
 }
 
-void Champion::move(int _x, int _y){
-
+void Champion::moveTo(int _x, int _y){
+	x = _x;
+	y = _y;
 }
 
 void Champion::move(Character *target){

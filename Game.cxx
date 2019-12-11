@@ -18,6 +18,7 @@ GLboolean Game::boutonClick = false;
 GLint Game::oldX = -1;
 GLint Game::oldY = -1;
 GLboolean Game::championDrag = false;
+Champion* Game::champTargeted = nullptr;
 GLdouble Game::Ax = Param::getBoardDim("x") / 2; //coordonn�es de la cam�ra
 GLdouble Game::Ay = 100;
 GLdouble Game::Az = -50;
@@ -228,17 +229,7 @@ GLvoid Game::souris(int bouton, int etat, int x, int y) {
 }
 
 GLvoid Game::deplacementSouris(int x, int y) {
-	// si le bouton gauche est appuye et qu'on se deplace
-	// alors on doit modifier les angles de rotations du cube
-	// en fonction de la derniere position de la souris
-	// et de sa position actuelle
 	
-
-
-
-
-
-	/*else if (boutonClick){ //si on ne clique pas sur le HUD, on test si on sélectionne un champion sur le board
 	//Projection des coordonnées de la souris sur le plan du board
 	GLdouble Bx, By, Bz; //coordon�es de a souris sur le plan de l'écran
 	GLdouble Mx, My, Mz, t; //point d'intersection du 'rayon' de la souris et du plan du board
@@ -253,24 +244,34 @@ GLvoid Game::deplacementSouris(int x, int y) {
 	Mx = t * (Bx - Ax) + Ax; //on calcule les positions de M  avec t
 	My = 0;
 	Mz = t * (Bz - Az) + Az;
-	int case_i = (int)(Mx / (Param::dimCase + 2*Param::borderSpacingCase));
-	int case_j = (int)(Mz / (Param::dimCase + 2*Param::borderSpacingCase));
-	Champion* champ = board->findChampion(case_i, case_j); //on trouve le champion qui est sur la case qu'on vise
-	if (!championDrag){
-	if (0 < case_i && 0 < case_j && case_i < Param::nbColumns && case_j < Param::nbRows) {
-	if (champ != nullptr) {
-	champ->dragndrop(x, y);
-	championDrag = true;
-	glutPostRedisplay();
+	if (boutonClick && y < Param::windowHeight - Param::cardHeightUp){ //si on ne clique pas sur le HUD, on test si on sélectionne un champion sur le board
+		
+
+		if (!championDrag){
+			int case_i = (int)(Mx / (Param::dimCase + 2*Param::borderSpacingCase));
+			int case_j = (int)(Mz / (Param::dimCase + 2*Param::borderSpacingCase));
+			champTargeted = Game::currentInstance->getBoard().findChampion(case_i, case_j);//on regarde si un champion est sur la case qu'on vise
+				if (champTargeted != nullptr){
+					championDrag = true;
+				}
+		}
+		else {
+			champTargeted -> moveTo(Mx, Mz);
+		}
 	}
+	else if (!boutonClick && championDrag){
+		championDrag = false;
+		int _i = (int)(Mx / (Param::dimCase + 2*Param::borderSpacingCase));
+		int _j = (int)(Mz / (Param::dimCase + 2*Param::borderSpacingCase));
+		if (currentInstance->getBoard().findChampion(_i, _j) == nullptr){
+			champTargeted->setI(_i);
+			champTargeted->setJ(_j);
+		}
+		champTargeted -> moveTo((champTargeted->getI())*(Param::dimCase + 2*Param::borderSpacingCase) + Param::borderSpacingCase + Param::dimCase/2, (champTargeted->getJ())*(Param::dimCase + 2*Param::borderSpacingCase) + Param::borderSpacingCase + Param::dimCase/2);
 	}
-	}
-	else{
-	}
-	}
+
 	// Appeler le re-affichage de la scene OpenGL
 	glutPostRedisplay();
-	*/
 }
 
 

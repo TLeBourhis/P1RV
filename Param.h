@@ -21,13 +21,17 @@ public:
   static const int nbColumns;
   static const int dimCase;
   static const int borderSpacingCase;
+   static const int cardHeightUp;
+  static const int cardHeightDown;
+  static const int cardWidth;
+  static const int cardSpace;
   static const float caseColor[3];
   static const int nbCardsOnPick;
   static const int cardsHeight;
   static const float percentageWidthTakenByCardsPick;
   static float championColor[4];
   static float monsterColor[4];
-  static const float Cinf; //Constante utilisé dans le calcul du poids des connexions dans le graphe d'adjacence
+  static const float Cinf; //Constante utilisÃ© dans le calcul du poids des connexions dans le graphe d'adjacence
   static std::vector<std::vector<Monster*>> monstersByRounds; //A initialiser correctement
   static const int maxRage; //Rage maximale pour les montres = 100
   static const int rageByHit; //Gain de rage par aa = 10

@@ -22,6 +22,7 @@ private:
 	static GLint oldX;
 	static GLint oldY;
 	static GLboolean championDrag;
+	static Champion* champTargeted;
 	static GLdouble Ax;
 	static GLdouble Ay;
 	static GLdouble Az;

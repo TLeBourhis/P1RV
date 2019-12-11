@@ -25,6 +25,8 @@ Character::Character(std::string _name, int _armor, int _magicResistance, float 
 	attackDamage = _attackDamage;
 	i = _i;
 	j = _j;
+	x = i*(Param::dimCase + 2*Param::borderSpacingCase) - Param::borderSpacingCase - Param::dimCase/2; //i correspond au numéro de colonne
+  y = 	y = j*(Param::dimCase + 2*Param::borderSpacingCase) - Param::borderSpacingCase - Param::dimCase/2; //j correspond au numéro de ligne
 	caseID = _caseID;
 	color[0] = 0.0f;
 	color[1] = 0.0f;
@@ -67,6 +69,6 @@ float Character::distance(Character * c) const {
 }
 
 void Character::moveTo(int _x, int _y) {
-	this->i = (int)(_x / (Param::dimCase + 2 * Param::borderSpacingCase));
-	this->j = (int)(_y / (Param::dimCase + 2 * Param::borderSpacingCase));
+	this->x = _x;
+ 	this->y = _y;
 }

@@ -18,10 +18,9 @@ public:
   void fight(std::list<Character*> allies, std::list<Character*> ennemies);
   void displayCard(int i) const;
   void evolve();
-  void dragndrop(int _x, int _y);
   int buy();
   int sell();
-  void move(int _x, int _y);
+  void moveTo(int _x, int _y);
   void move(Character *target);
   int die();
   void setColor(){color[0] = Param::championColor[0]; color[1] = Param::championColor[1]; color[2] = Param::championColor[2]; color[3] = Param::championColor[3];};

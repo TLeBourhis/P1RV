@@ -1,7 +1,7 @@
 #include "Game.h"
 #include "Param.h"
-#include <GL/gl.h>
-#include <GL/glut.h>
+#include <GL\glew.h>
+#include <GL\freeglut.h>
 #include <string>
 #include <thread>
 using namespace std;

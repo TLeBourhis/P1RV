@@ -59,8 +59,6 @@ void Board::reinitChampions() {
 		(*it)->reset(i, j);
 		i++;
 	}
-
-	
 }
 
 void Board::applyRaceBonus() {
@@ -70,6 +68,7 @@ void Board::applyRaceBonus() {
 		(*it)->addBonus(champions);
 	}
 }
+
 
 void Board::setMonsters(int round) {
 	//Ajoute les monstres pour ce round sur le board

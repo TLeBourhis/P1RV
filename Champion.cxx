@@ -27,6 +27,7 @@ Champion::Champion(Champion * c) : Character(c->name,c->armor,c->magicResistance
 	cost = c->cost;
 	races[0] = c->races[0];
 	races[1] = c->races[1];
+	
 }
 
 Champion::~Champion(){
@@ -80,29 +81,10 @@ void Champion::fight(list<Character*> allies, list<Character*> ennemies){
 }
 
 
-void Champion::displayCard(int i) const{
-  //Affiche les "cards" du champion lors de la pioche.
-
-
-
-
-  // Effacement du frame buffer
-  //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  //Affichage des bordures de la carte:
-  glColor3f(1.0f,1.0f,1.0f);
-  glBegin(GL_QUADS);
-
-  glEnd();
-
-  glutSwapBuffers();
-}
-
 void Champion::evolve(){
   //Fait evoluer le champion au niveau supérieur et modifie ses stats
 
 }
-
 
 int Champion::buy(){
 
@@ -136,7 +118,6 @@ void Champion::display() const{
 		glPopMatrix();
 	}
 }
-
 
 void Champion::move(Character *target){
 	//Calcul du chemin le plus rapide

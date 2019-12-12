@@ -6,8 +6,6 @@
 #include <list>
 #include <map>
 
-
-
 class Champion;
 
 class Monster;
@@ -24,12 +22,16 @@ public:
   static const int nbColumns;
   static const int dimCase;
   static const int borderSpacingCase;
+   static const int cardHeightUp;
+  static const int cardHeightDown;
+  static const int cardWidth;
+  static const int cardSpace;
   static const float caseColor[3];
   static const int nbCardsOnPick;
   static const int cardsHeight;
   static const float percentageWidthTakenByCardsPick;
-  static std::map<std::string,std::vector<float>> colors;
-  static const float Cinf; //Constante utilisé dans le calcul du poids des connexions dans le graphe d'adjacence
+  static std::map<std::string, std::vector<float>> colors;
+  static const float Cinf; //Constante utilisÃ© dans le calcul du poids des connexions dans le graphe d'adjacence
   static std::vector<std::vector<Monster*>> monstersByRounds; //A initialiser correctement
   static const int maxRage; //Rage maximale pour les montres = 100
   static const int rageByHit; //Gain de rage par aa = 10
@@ -39,12 +41,6 @@ public:
   static const int sleepTime;
 
   
-  static const int cardHeightUp;
-  static const int cardHeightDown;
-  static const int cardWidth;
-  static const int cardSpace;
-
-
   static const int nbRounds;
   static const int startingGolds;
 

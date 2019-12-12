@@ -3,6 +3,7 @@
 #include <cmath>
 #include <string>
 #include <iostream>
+#include <vector>
 #include "Game.h"
 
 using namespace std;
@@ -32,9 +33,8 @@ Character::Character(std::string _name, int _armor, int _magicResistance, float 
 	attackDamage = _attackDamage;
 	i = _i;
 	j = _j;
-	x = i*(Param::dimCase + 2 * Param::borderSpacingCase) + Param::borderSpacingCase + Param::dimCase / 2; //i correspond au numéro de colonne
-	y = j*(Param::dimCase + 2 * Param::borderSpacingCase) + Param::borderSpacingCase + Param::dimCase / 2; //j correspond au numéro de ligne
-	caseID = _caseID;
+	x = i * (Param::dimCase + 2 * Param::borderSpacingCase) + Param::borderSpacingCase + Param::dimCase / 2; //i correspond au numÃ©ro de colonne
+	y = j * (Param::dimCase + 2 * Param::borderSpacingCase) + Param::borderSpacingCase + Param::dimCase / 2; //j correspond au numÃ©ro de ligne
 	setColor();
 }
 
@@ -54,7 +54,6 @@ void Character::reset(int _i, int _j) {
 float Character::getColor(int i) const {
 	return color[i];
 };
-
 
 void Character::getHit(int damage, string type) {
 	cout << "attack" << endl;
@@ -84,7 +83,7 @@ float Character::distance(Character * c) const {
 
 void Character::moveTo(int _x, int _y) {
 	this->x = _x;
-	this->y = _y;
+ 	this->y = _y;
 }
 
 void Character::setColor() {
@@ -97,6 +96,6 @@ void Character::setColor() {
 void Character::setIJ(int _i, int _j) {
 	i = _i;
 	j = _j;
-	x = i*(Param::dimCase + 2 * Param::borderSpacingCase) + Param::borderSpacingCase + Param::dimCase / 2;
-	y = j*(Param::dimCase + 2 * Param::borderSpacingCase) + Param::borderSpacingCase + Param::dimCase / 2;
+	x = i * (Param::dimCase + 2 * Param::borderSpacingCase) + Param::borderSpacingCase + Param::dimCase / 2;
+	y = j * (Param::dimCase + 2 * Param::borderSpacingCase) + Param::borderSpacingCase + Param::dimCase / 2;
 }

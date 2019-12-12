@@ -16,7 +16,6 @@ private:
 public:
   virtual void display() const;
   void fight(std::list<Character*> allies, std::list<Character*> ennemies);
-  void displayCard(int i) const;
   void evolve();
   int buy();
   int sell();

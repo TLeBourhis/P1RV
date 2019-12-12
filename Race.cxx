@@ -33,9 +33,9 @@ void Race::addBonus(list<Champion*> champions) const{
 	}
 }
 
-void Race::addBonusTo(Champion * c, int i) const{
+void Race::addBonusTo(Champion * c, int i) const {
 	string add = bonus[i].substr(0, bonus[i].find(" "));
-	string caracteristic = bonus[i].substr(bonus[i].find(" ")+1, bonus[i].size());
+	string caracteristic = bonus[i].substr(bonus[i].find(" ") + 1, bonus[i].size());
 	cout << add << "|" << caracteristic << endl;
 
 	//Détermination du caracteristic
@@ -62,7 +62,7 @@ void Race::addBonusTo(Champion * c, int i) const{
 	}
 }
 
-list<Champion*> Race::getChampionsFromRace(list<Champion*> champions) const{
+list<Champion*> Race::getChampionsFromRace(list<Champion*> champions) const {
 	list<Champion*> champs;
 	for (auto it = champions.begin(); it != champions.end(); it++) {
 		if ((*it)->getRace(0) == this || (*it)->getRace(1) == this) {
@@ -71,6 +71,7 @@ list<Champion*> Race::getChampionsFromRace(list<Champion*> champions) const{
 	}
 	return champs;
 }
+
 
 
 void Race::display() const{

@@ -62,7 +62,7 @@ public:
 
   //Accesseurs
   int getX() { return x; };
-  int getY() { return y; };	
+  int getY() { return y; };
   int getI() { return i; };
   int getJ() { return j; };
   void setX(int _x) { x = _x; };
@@ -75,7 +75,7 @@ public:
   void addMagicResistance(int mr) { magicResistance += mr; };
   void addSpellPower(float sp) { spellPower += sp; };
   void addAttackRange(int ar) { attackRange += ar; };
-  void addHealth(int h) {maxHealth += h; health += h;};
+  void addHealth(int h) { maxHealth += h; health += h; };
   void addAttackSpeed(float as) { attackSpeed += as; };
   void addAttackDamage(int ad) { attackDamage += ad; };
 

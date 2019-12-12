@@ -48,12 +48,10 @@ GLvoid Game::display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	board->display();
 	this->displayHUD();
-	this->displayCards();
-	this->displayInfo();
 	glutSwapBuffers();
 }
 
-GLvoid Game::drawText(float x, float y, int length, const char *text) {
+GLvoid Game::drawText(float x, float y, int length, const char *text, float colorR, float colorV, float colorB) {
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
@@ -61,7 +59,7 @@ GLvoid Game::drawText(float x, float y, int length, const char *text) {
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
-	glColor3f(1.0f, 1.0f, 1.0f);
+	glColor3f(colorR, colorV, colorB);
 	glRasterPos2f(x, y);
 	for (int i = 0; i<length; i++) {
 		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, (int)text[i]);
@@ -85,9 +83,10 @@ GLvoid Game::displayCards() {
 	glDisable(GL_DEPTH_TEST);			// à enlever puis remettre pour afficher le texte par dessus la carte
 
 	list<Champion*>::iterator it = championCards.begin();
-	for (int k = 0; k < 5; k++) { //affichage des 5 cartes de champion
+	int space = Param::cardSpace + Param::cardWidth;
+	for (int k = 0; k < Param::nbCardsOnPick; k++) { //affichage des 5 cartes de champion
 		if ((*it) != nullptr) {
-			glColor3f(0.8f, 0.8f, 0.8f);
+			glColor3f((*it)->getColor(0), (*it)->getColor(1), (*it)->getColor(2));
 			glBegin(GL_QUADS);					//affichage de la carte
 			glVertex2f(50.0f + k * space, Param::cardHeightUp);
 		  	glVertex2f(50.0f + k * space, Param::cardHeightDown);
@@ -96,11 +95,16 @@ GLvoid Game::displayCards() {
 			glEnd();
 
 			glColor3f(0.0f, 0.0f, 0.0f);
-			string cardText = (*it)->getName();				//affichage du texte de la carte
-			glRasterPos2f(65.0f + k * space, 200.0f);
-			for (int i = 0; i < cardText.size(); i++) {
-				glutBitmapCharacter(GLUT_BITMAP_9_BY_15, (int)cardText.data()[i]);
-			}
+			string cardName = (*it)->getName();//affichage du texte de la carte
+			drawText(65.0f + k * space, 190.0f, cardName.size(), cardName.data(), 0.0f, 0.0f, 0.0f);
+			string cardCost = std::to_string((*it)->getCost()) + "G";
+			drawText(160.0f + k * space, 210.0f, cardCost.size(), cardCost.data(), 0.0f, 0.0f, 0.0f);
+			string cardRaceTitre = "Races :";
+			drawText(65.0f + k * space, 150.0f, cardRaceTitre.size(), cardRaceTitre.data(), 0.0f, 0.0f, 0.0f);
+			string cardRace1 = (*it)->getRace(0)->getName();
+			drawText(85.0f + k * space, 120.0f, cardRace1.size(), cardRace1.data(), 0.0f, 0.0f, 0.0f);
+			string cardRace2 = (*it)->getRace(1)->getName();
+			drawText(85.0f + k * space, 90.0f, cardRace2.size(), cardRace2.data(), 0.0f, 0.0f, 0.0f);
 		}
 		advance(it, 1);
 	}
@@ -114,19 +118,52 @@ GLvoid Game::displayCards() {
 
 }
 
+GLvoid Game::displayButtons() {
+	if (!readyToFight) {
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+		glLoadIdentity();
+		gluOrtho2D(0.0f, Param::windowWidth, 0.0f, Param::windowHeight);
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+		glLoadIdentity();
+
+		glDisable(GL_DEPTH_TEST);
+
+		glColor3f(0.8f, 0.8f, 0.8f);
+		glBegin(GL_QUADS);					//affichage de la carte
+		glVertex2f(Param::windowWidth - 180.0f, Param::windowHeight - 50.0f);
+		glVertex2f(Param::windowWidth - 180.0f, Param::windowHeight - 110.0f);
+		glVertex2f(Param::windowWidth - 50.0f, Param::windowHeight - 110.0f);
+		glVertex2f(Param::windowWidth - 50.0f, Param::windowHeight - 50.0f);
+		glEnd();
+
+		string message = "READY";
+		drawText(Param::windowWidth - 140.0f, Param::windowHeight - 85.0f, message.size(), message.data(), 0.0f, 0.0f, 0.0f);
+
+		glEnable(GL_DEPTH_TEST);
+
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
+		glMatrixMode(GL_MODELVIEW);
+		glPopMatrix();
+	}
+}
+
 GLvoid Game::displayInfo() {
 	std::string goldText = "Gold : ";
 	goldText += std::to_string(getGold());
-	drawText(50.0f, 900.0f, goldText.size(), goldText.data());
+	drawText(50.0f, Param::windowHeight - 100.0f, goldText.size(), goldText.data(), 1.0f, 1.0f, 1.0f);
 	std::string roundText = "Round : ";
 	roundText += std::to_string(getRound());
-	this->drawText(50.0f, 930.0f, roundText.size(), roundText.data());
+	this->drawText(50.0f, Param::windowHeight - 70.0f, roundText.size(), roundText.data(), 1.0f, 1.0f, 1.0f);
 }
 
 GLvoid Game::displayHUD() {
 	displayInfo();
 	displayCards();
 	displayRaces();
+	displayButtons();
 }
 
 
@@ -135,11 +172,25 @@ GLvoid Game::displayRaces() {
 	int i = 0;
 	for (auto it = races.begin(); it != races.end(); it++) {
 		string raceText = (*it)->getName();
+		int qteRace = Game::currentInstance->getBoard()->count(*it);
+		int seuil1 = (*it)->getBonusTreshold(0);
+		int seuil2 = (*it)->getBonusTreshold(1);
+		int textcolor[3] = { 1.0f, 1.0f, 1.0f };
 		raceText += " : ";
-		raceText += to_string(Game::currentInstance->getBoard()->count(*it));
+		raceText += to_string(qteRace);
 		raceText += "/";
-		raceText += to_string((*it)->getBonusTreshold(0));
-		drawText(50.0f, 750 - i*30, raceText.size(), raceText.data());
+		if (qteRace < seuil1) {
+			raceText += to_string(seuil1);
+		}
+		else if (seuil1 <= qteRace && qteRace < seuil2) {
+			raceText += to_string(seuil2);
+			textcolor[0] = 0.0f;
+		}
+		else {
+			raceText += to_string(seuil2);
+			textcolor[1] = 0.0f;
+		}		
+		drawText(50.0f, Param::windowHeight - 250 - i*30, raceText.size(), raceText.data(), textcolor[0], textcolor[1], textcolor[2]);
 		i++;
 	}
 }
@@ -185,8 +236,8 @@ void Game::clavier(unsigned char key, int xx, int yy) {
 		exit(0);
 		break;
 
-	case 's':
-		Game::currentInstance->setReadyToFight(true);
+	/*case 's':
+		Game::currentInstance->setReadyToFight(true);*/
 	}
 }
 
@@ -209,7 +260,7 @@ GLvoid Game::souris(int bouton, int etat, int x, int y) {
 	}
 
 
-	if (boutonClick && y > 643) {  //&& test pour voir si x et y correspondent à une partie du HUD
+	if (boutonClick && !Game::currentInstance->readyToFight && y > Param::windowHeight - Param::cardHeightUp) {  //&& test pour voir si x et y correspondent à une partie du HUD
 								   //643 c'est une valeur prise empiriquement en étudiant la position de la souris
 		int selec = Game::currentInstance->selectionCards(x, y);
 		if (selec >= 0) {
@@ -226,10 +277,14 @@ GLvoid Game::souris(int bouton, int etat, int x, int y) {
 			}
 		}
 	}
+
+	if (boutonClick && !Game::currentInstance->readyToFight && x > Param::windowWidth - 180.0f && x < Param::windowWidth - 50.0f && y < 110.0f && y > 50.0f) {
+		Game::currentInstance->setReadyToFight(true);
+	}
 }
 
 GLvoid Game::deplacementSouris(int x, int y) {
-	
+	cout << x << "," << y << endl;
 	//Projection des coordonnées de la souris sur le plan du board
 	GLdouble Bx, By, Bz; //coordon�es de a souris sur le plan de l'écran
 	GLdouble Mx, My, Mz, t; //point d'intersection du 'rayon' de la souris et du plan du board
@@ -244,13 +299,13 @@ GLvoid Game::deplacementSouris(int x, int y) {
 	Mx = t * (Bx - Ax) + Ax; //on calcule les positions de M  avec t
 	My = 0;
 	Mz = t * (Bz - Az) + Az;
-	if (boutonClick && y < Param::windowHeight - Param::cardHeightUp){ //si on ne clique pas sur le HUD, on test si on sélectionne un champion sur le board
+	if (boutonClick && !Game::currentInstance->readyToFight && y < Param::windowHeight - Param::cardHeightUp){ //si on ne clique pas sur le HUD, on test si on sélectionne un champion sur le board
 		
 
 		if (!championDrag){
 			int case_i = (int)(Mx / (Param::dimCase + 2*Param::borderSpacingCase));
 			int case_j = (int)(Mz / (Param::dimCase + 2*Param::borderSpacingCase));
-			champTargeted = Game::currentInstance->getBoard().findChampion(case_i, case_j);//on regarde si un champion est sur la case qu'on vise
+			champTargeted = Game::currentInstance->getBoard()->findChampion(case_i, case_j);//on regarde si un champion est sur la case qu'on vise
 				if (champTargeted != nullptr){
 					championDrag = true;
 				}
@@ -263,11 +318,9 @@ GLvoid Game::deplacementSouris(int x, int y) {
 		championDrag = false;
 		int _i = (int)(Mx / (Param::dimCase + 2*Param::borderSpacingCase));
 		int _j = (int)(Mz / (Param::dimCase + 2*Param::borderSpacingCase));
-		if (currentInstance->getBoard().findChampion(_i, _j) == nullptr){
-			champTargeted->setI(_i);
-			champTargeted->setJ(_j);
+		if (currentInstance->getBoard()->findChampion(_i, _j) == nullptr){
+			champTargeted->setIJ(_i, _j);
 		}
-		champTargeted -> moveTo((champTargeted->getI())*(Param::dimCase + 2*Param::borderSpacingCase) + Param::borderSpacingCase + Param::dimCase/2, (champTargeted->getJ())*(Param::dimCase + 2*Param::borderSpacingCase) + Param::borderSpacingCase + Param::dimCase/2);
 	}
 
 	// Appeler le re-affichage de la scene OpenGL
@@ -280,8 +333,8 @@ void Game::setCards() {
 	list<Champion*>::iterator it;
 	srand(time(NULL));
 	int r;
-	for (int k = 0; k < 5; k++) {
-		r = rand() % 2;
+	for (int k = 0; k < Param::nbCardsOnPick; k++) {
+		r = rand() % Param::allChampions.size();
 		it = Param::allChampions.begin();
 		advance(it, r);
 		championCards.push_back(*it);
@@ -293,7 +346,7 @@ int Game::selectionCards(int x, int y) {
 	if (x > 50 && y < Param::windowHeight - Param::cardHeightDown) {
 		int i = (int)((x - 50) / (Param::cardWidth + Param::cardSpace));		//indice de la carte
 		int j = x - 50 - i * (Param::cardWidth + Param::cardSpace);		//permet de vérifier si on est sur la carte ou à coté
-		if (j < Param::cardWidth) {
+		if (j < Param::cardWidth && i < Param::nbCardsOnPick) {
 			k = i;
 		}
 	}
@@ -319,7 +372,7 @@ void Game::run() {
 		}
 
 		
-
+		board->applyRaceBonus();
 
 
 

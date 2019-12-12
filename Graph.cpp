@@ -126,7 +126,7 @@ list<NodeGraph*> Graph::getShorterPath(NodeGraph * startingNode, NodeGraph * tar
 
 NodeGraph* Graph::getMinNode() {
 	float min = -1;
-	NodeGraph *s;
+	NodeGraph *s = nullptr;
 	for (auto it = nodes.begin(); it != nodes.end(); it++) {
 		if ((*it)->isVerified()) {
 			//Le node a déjà été traité donc on ne s'y intéresse pas

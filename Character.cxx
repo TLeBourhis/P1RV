@@ -1,6 +1,7 @@
 #include "Character.h"
 #include "Param.h"
 #include <cmath>
+#include <algorithm>
 #include <string>
 #include <iostream>
 #include "Game.h"
@@ -59,13 +60,15 @@ float Character::getColor(int i) const {
 void Character::getHit(int damage, string type) {
 	cout << "attack" << endl;
 	if (type == "ATTACK_DAMAGE") {
-		health -= (damage - armor);
+		int dmg = max(damage - armor, 5);
+		health -= dmg;
 		if (health <= 0) {
 			Game::currentInstance->addGold(this->die());
 		}
 	}
 	else {
-		health -= (damage - magicResistance);
+		int dmg = max(damage - magicResistance, 5);
+		health -= dmg;
 		if (health <= 0) {
 			Game::currentInstance->addGold(this->die());
 		}

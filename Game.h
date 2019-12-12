@@ -40,7 +40,9 @@ private:
 
 public:
 	static Game* currentInstance;
-	static GLvoid displayCallBack();
+	static std::list<Champion*> garbageChampions;
+	static void cleanGarbage();
+ 	static GLvoid displayCallBack();
 	static GLvoid reshape(int w, int h);
 	static void clavier(unsigned char key, int xx, int yy);
 	static GLvoid souris(int bouton, int etat, int x, int y);
@@ -49,6 +51,7 @@ public:
 	void run();
 
 	void setReadyToFight(bool b) {readyToFight = b;};
+	bool getReadyToFight() { return readyToFight; };
 
 	void setCards();
 	int selectionCards(int x, int y);

@@ -5,6 +5,7 @@
 #include "Monster.h"
 #include "Graph.h"
 #include "Race.h"
+#include <iterator>
 #include <GL\glew.h>
 #include <GL\freeglut.h>
 
@@ -23,7 +24,7 @@ public:
   void clearMonsters();
   void setMonsters(int round);
   void addChampion(Champion * champion);
-  void removeChampion(int indice);
+  void removeChampion(std::list<Champion*>::iterator it);
   Champion* findChampion(int _i, int _j);
   Character* findCharacter(int _i, int _j);
   bool fight();
@@ -32,7 +33,7 @@ public:
   std::list<NodeGraph*> getShorterPath(int i, int j, Character * c);
   void reinitChampions();
   std::list<Race*> getRaces();
-  int count(Race * race);
+  int count(Race * const  race);
   void applyRaceBonus();
 
 

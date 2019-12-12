@@ -37,6 +37,15 @@ public:
   static const int maxMana; //Mana maximum pour les boss = 100
   static const int manaByHit; //Gain de mana par aa = 10
   static const int sleepTime;
+  static const int healthBonusByLevel;
+  static const int armorBonusByLevel;
+  static const int magicResistanceBonusByLevel;
+  static const float spellPowerBonusByLevel;
+  static const int attackRangeBonusByLevel;
+  static const float attackSpeedBonusByLevel;
+  static const int attackDamageBonusByLevel;
+
+  static const int levelMax;
 
   
   static const int cardHeightUp;

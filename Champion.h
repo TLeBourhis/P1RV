@@ -23,6 +23,7 @@ public:
   int die();
   //void spell(Monster *monster);
   Race * getRace(int i);
+  void reset(int _i, int _j);
 
 
 
@@ -36,6 +37,7 @@ public:
   //Accesseurs
   std::string getName() { return name; };
   int getCost() { return cost; };
+  int getLevel() { return level; };
 };
 
 #endif /* end of include guard: CHAMPION_H */

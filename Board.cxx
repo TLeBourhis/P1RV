@@ -1,5 +1,6 @@
 #include "Board.h"
 #include "Param.h"
+#include "Game.h"
 #include "Champion.h"
 #include "Monster.h"
 #include "Graph.h"
@@ -33,11 +34,22 @@ list<Race*> Board::getRaces() {
 	return races;
 }
 
-int Board::count(Race * race) {
+int Board::count(Race* const race) {
 	int count = 0;
+	list<string> champNames;
 	for (auto it = champions.begin(); it != champions.end(); it++) {
 		if ((*it)->getRace(0) == race || (*it)->getRace(1) == race) {
-			count++;
+			if (champNames.empty()) {
+				count++;
+				champNames.push_back((*it)->getName());
+			}
+			else {
+				if (find(champNames.begin(), champNames.end(), (*it)->getName()) == champNames.end()) {
+					count++;
+					champNames.push_back((*it)->getName());
+				}
+			}
+			
 		}
 	}
 	return count;
@@ -79,13 +91,31 @@ void Board::setMonsters(int round) {
 	}
 }
 
-void Board::removeChampion(int indice) {
+void Board::removeChampion(list<Champion*>::iterator it) {
 	//ATTENTION : ça peut delete l'objet sur lequel pointe le pointeur
-	//champions.erase(indice);
+	Game::garbageChampions.push_back(*it);
+	champions.erase(it);
 }
 
 void Board::addChampion(Champion * champion) {
+	//Test pour l'évolution
 
+	//On compte le nombre de champion du même type sur le board
+	int count = 0;
+	list<list<Champion*>::iterator> listIteratorToDelete;
+	if (champion->getLevel() != Param::levelMax) {
+		for (auto it = champions.begin(); it != champions.end(); it++) {
+			cout << (*it)->getLevel() << endl;
+			cout << champion->getLevel() << endl;
+			if ((*it)->getName() == champion->getName() && (*it)->getLevel() == champion->getLevel()) {
+				count++;
+				listIteratorToDelete.push_back(it);
+			}
+		}
+	}
+	
+
+	
 
 	//Ajout des nouveaux champions sur le board à un emplacement vide
 	Champion * newChampion = new Champion(champion);
@@ -98,13 +128,24 @@ void Board::addChampion(Champion * champion) {
 		}
 		i++;
 	}
-	newChampion->setIJ(i, j);
-	champions.push_back(newChampion);
+
+	//Si on a déjà deux champions du même type sur le board alors on delete les champions sur le board et on evolve le nouveau
+	if (count == 2) {
+		for (auto it = listIteratorToDelete.begin(); it != listIteratorToDelete.end(); it++) {
+			this->removeChampion(*it);
+		}
+		newChampion->evolve();
+		addChampion(newChampion);
+	}
+	else {
+		newChampion->setIJ(i, j);
+		champions.push_back(newChampion);
+	}
+
+	
 }
 
 Champion* Board::findChampion(int _i, int _j) {
-	//ATTENTION : il faudrait faire une fonction find character en plus pour ne pas oublier les monstres
-
 	//Retourne le pointer vers le champion présent sur la case i,j
 	Champion* champ = nullptr;
 	for (list<Champion*>::iterator itr = champions.begin(); itr != champions.end(); itr++) {

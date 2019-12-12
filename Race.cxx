@@ -1,6 +1,7 @@
 #include "Race.h"
 
-#include "Champion.h";
+#include "Champion.h"
+#include "Game.h"
 #include <iostream>
 
 using namespace std;
@@ -16,7 +17,7 @@ Race::Race(string _name, int _bT1, int _bT2, string _b1, string _b2){
 
 void Race::addBonus(list<Champion*> champions) const{
 	list<Champion*> champs = this->getChampionsFromRace(champions);
-	int n = champs.size();
+	int n = count(champs);
 	if (n >= bonusTreshold[0]) {
 		if (n >= bonusTreshold[1]) {
 			//On applique le bonus[1]
@@ -31,6 +32,24 @@ void Race::addBonus(list<Champion*> champions) const{
 			}
 		}
 	}
+}
+
+int Race::count(list<Champion*> champions) const{
+	int count = 0;
+	list<string> champNames;
+	for (auto it = champions.begin(); it != champions.end(); it++) {
+		if (champNames.empty()) {
+			count++;
+			champNames.push_back((*it)->getName());
+		}
+		else {
+			if (find(champNames.begin(), champNames.end(), (*it)->getName()) == champNames.end()) {
+				count++;
+				champNames.push_back((*it)->getName());
+			}
+		}
+	}
+	return count;
 }
 
 void Race::addBonusTo(Champion * c, int i) const{

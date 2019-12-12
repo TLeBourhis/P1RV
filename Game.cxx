@@ -13,6 +13,7 @@
 using namespace std;
 
 Game* Game::currentInstance = nullptr;
+list<Champion*> Game::garbageChampions;
 
 GLboolean Game::boutonClick = false;
 GLint Game::oldX = -1;
@@ -218,7 +219,7 @@ GLvoid Game::souris(int bouton, int etat, int x, int y) {
 	}
 
 
-	if (boutonClick && y > Param::windowHeight - Param::cardHeightUp) {  //&& test pour voir si x et y correspondent à une partie du HUD
+	if (boutonClick && y > Param::windowHeight - Param::cardHeightUp && !Game::currentInstance->getReadyToFight()) {  //&& test pour voir si x et y correspondent à une partie du HUD
 								   //643 c'est une valeur prise empiriquement en étudiant la position de la souris
 		int selec = Game::currentInstance->selectionCards(x, y);
 		if (selec >= 0) {
@@ -321,7 +322,7 @@ void Game::run() {
 			//Gestion de l'achat des cartes
 			
 		}
-
+		Game::cleanGarbage();
 		board->applyRaceBonus();
 		
 
@@ -339,4 +340,9 @@ void Game::run() {
 		//Passage au round suivant
 		round++;
 	}
+}
+
+
+void Game::cleanGarbage() {
+	garbageChampions.clear();
 }

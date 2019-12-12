@@ -28,6 +28,7 @@ public:
   std::string getName() { return name; };
   int getBonusTreshold(int i) { return bonusTreshold[i]; };
   void addBonusTo(Champion * c, int i) const;
+  int count(std::list<Champion*> champions) const;
 
   std::list<Champion*> getChampionsFromRace(std::list<Champion*> champions) const;
 };

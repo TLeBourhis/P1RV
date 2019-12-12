@@ -59,6 +59,16 @@ void Board::reinitChampions() {
 		(*it)->reset(i, j);
 		i++;
 	}
+
+	
+}
+
+void Board::applyRaceBonus() {
+	//Application des bonus de race
+	list<Race*> races = getRaces();
+	for (auto it = races.begin(); it != races.end(); it++) {
+		(*it)->addBonus(champions);
+	}
 }
 
 void Board::setMonsters(int round) {

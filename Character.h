@@ -14,14 +14,21 @@ protected:
   int id;
   std::string name;
   //Object objects[3];
+  int initialArmor;
   int armor;
+  int initialMagicResistance;
   int magicResistance;
+  float initialSpellPower;
   float spellPower;
+  int initialAttackRange;
   int attackRange;
+  float initialAttackSpeed;
   float attackSpeed;
   bool alive;
   int health;
   int maxHealth;
+  int initialHealth;
+  int initialAttackDamage;
   int attackDamage;
   float x;
   float y;
@@ -35,7 +42,6 @@ protected:
 public:
   virtual void fight(std::list<Character*> allies, std::list<Character*> ennemies) = 0;
   virtual void display() const{};
-  virtual void setColor(){};
   virtual void reset(int _i, int _j);
 
   virtual void move(Character *target){}; //Utilisé lors des combats
@@ -56,12 +62,22 @@ public:
 
   //Accesseurs
   int getX() { return x; };
-  int getY() { return y; };
+  int getY() { return y; };	
   int getI() { return i; };
   int getJ() { return j; };
   void setX(int _x) { x = _x; };
   void setY(int _y) { y = _y; };
-  void setIJ(int _i, int _j) { i = _i; j = _j; };
+  void setIJ(int _i, int _j);
+  void setColor();
+  float getColor(int i) const;
+
+  void addArmor(int a) { armor += a; };
+  void addMagicResistance(int mr) { magicResistance += mr; };
+  void addSpellPower(float sp) { spellPower += sp; };
+  void addAttackRange(int ar) { attackRange += ar; };
+  void addHealth(int h) {maxHealth += h; health += h;};
+  void addAttackSpeed(float as) { attackSpeed += as; };
+  void addAttackDamage(int ad) { attackDamage += ad; };
 
 };
 

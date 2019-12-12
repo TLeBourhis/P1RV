@@ -27,7 +27,6 @@ Champion::Champion(Champion * c) : Character(c->name,c->armor,c->magicResistance
 	cost = c->cost;
 	races[0] = c->races[0];
 	races[1] = c->races[1];
-	setColor();
 }
 
 Champion::~Champion(){
@@ -104,6 +103,7 @@ void Champion::evolve(){
 
 }
 
+
 int Champion::buy(){
 
   return -cost;
@@ -126,7 +126,7 @@ void Champion::display() const{
 		glColor4f(color[0], color[1], color[2], color[3]);
 
 		
-		glTranslatef(i*(2 * Param::borderSpacingCase + Param::dimCase) + Param::borderSpacingCase + Param::dimCase / 2, 5.0f, j*(2 * Param::borderSpacingCase + Param::dimCase) + Param::borderSpacingCase + Param::dimCase / 2);
+		glTranslatef(x, 5.0f, y);
 		float rayon = (float)health/(float)maxHealth*4+1;
 
 
@@ -137,10 +137,6 @@ void Champion::display() const{
 	}
 }
 
-void Champion::moveTo(int _x, int _y){
-	x = _x;
-	y = _y;
-}
 
 void Champion::move(Character *target){
 	//Calcul du chemin le plus rapide
@@ -150,8 +146,7 @@ void Champion::move(Character *target){
 	}
 	else {
 		NodeGraph * nextNode = *path.begin();
-		i = nextNode->getI();
-		j = nextNode->getJ();
+		setIJ(nextNode->getI(), nextNode->getJ());
 	}
 }
 

@@ -13,7 +13,6 @@ using namespace std;
 Monster::Monster(string _name, int _armor, int _magicResistance, float _spellPower, int _attackRange, float _attackSpeed, int _health, int _attackDamage, int _i, int _j, int _caseID, int _gold, int _rage) : Character(_name,_armor,_magicResistance, _spellPower, _attackRange, _attackSpeed, _health, _attackDamage, _i, _j, _caseID){
   gold = _gold;
   rage = _rage;
-  setColor();
 }
 
 void Monster::fight(list<Character*> allies, list<Character*> ennemies){
@@ -22,7 +21,7 @@ void Monster::fight(list<Character*> allies, list<Character*> ennemies){
 	//Gère les actions du champion lors du combat.
 
 
-	if (size(ennemies) == 0) {
+	if (ennemies.size() == 0) {
 		//Si pas d'ennemi
 
 
@@ -84,8 +83,7 @@ void Monster::move(Character *target){
 	else {
 		NodeGraph * nextNode = *path.begin();
 
-		i = nextNode->getI();
-		j = nextNode->getJ();
+		setIJ(nextNode->getI(), nextNode->getJ());
 	}
 };
 

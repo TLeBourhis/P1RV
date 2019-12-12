@@ -4,6 +4,7 @@
 #include <vector>
 #include "Race.h"
 #include <list>
+#include <map>
 
 using namespace std;
 
@@ -15,13 +16,8 @@ int const Param::nbRows = 10;
 int const Param::nbColumns = 10;
 int const Param::dimCase = 10;
 int const Param::borderSpacingCase = 2;
-int const Param::cardHeightUp = 250;
-int const Param::cardHeightDown = 50;
-int const Param::cardWidth = 150;
-int const Param::cardSpace = 20;
 float const Param::caseColor[3] = {0.5f,0.5f,0.5f};
-float Param::championColor[4] = {1.0f, 0.0f, 0.0f, 1.0f};
-float Param::monsterColor[4] = {0.0f, 1.0f, 0.0f, 1.0f};;
+map<string, vector<float>> Param::colors;
 int const Param::nbCardsOnPick = 5; //Nombre de cartes piochées par tour
 float const Param::percentageWidthTakenByCardsPick = 0.8;
 float const Param::Cinf = 100;
@@ -31,6 +27,14 @@ int const Param::rageByHitForBoss = 20;
 int const Param::maxMana = 100;
 int const Param::manaByHit = 10;
 int const Param::sleepTime = 250;
+
+
+
+int const Param::cardHeightUp = 250;
+int const Param::cardHeightDown = 50;
+int const Param::cardWidth = 150;
+int const Param::cardSpace = 20;
+
 
 
 int const Param::nbRounds = 5;
@@ -65,49 +69,70 @@ int Param::getCardsWidth(){
 
 
 void Param::init() {
+	//Initialisation des couleurs
+	vector<float> c;
+	c.push_back(0);
+	c.push_back(1);
+	c.push_back(0);
+	c.push_back(1);
+	colors.emplace("PE", c);
+	c.clear();
+	c.push_back(0);
+	c.push_back(0);
+	c.push_back(1);
+	c.push_back(1);
+	colors.emplace("Thomas", c);
+	c.clear();
+	c.push_back(1);
+	c.push_back(0);
+	c.push_back(0);
+	c.push_back(1);
+	colors.emplace("Esteban", c);
+
+
 	//Initialisation des monstres
 
 	vector<Monster*> round_1;
-	round_1.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 500, 20, 5, 8, 10, 5, 10));
+	round_1.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 5, 8, 10, 5, 10));
 	Param::monstersByRounds.push_back(round_1);
 
 	vector<Monster*> round_2;
-	round_2.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 500, 20, 5, 8, 10, 5, 10));
-	round_2.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 500, 20, 6, 8, 10, 10, 10));
+	round_2.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 5, 8, 10, 5, 10));
+	round_2.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 6, 8, 10, 10, 10));
 	Param::monstersByRounds.push_back(round_2);
 
 	vector<Monster*> round_3;
-	round_3.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 500, 20, 5, 8, 10, 5, 10));
-	round_3.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 500, 20, 6, 8, 10, 5, 10));
-	round_3.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 500, 20, 5, 7, 10, 5, 10));
+	round_3.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 5, 8, 10, 5, 10));
+	round_3.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 6, 8, 10, 5, 10));
+	round_3.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 5, 7, 10, 5, 10));
 	Param::monstersByRounds.push_back(round_3);
 
 	vector<Monster*> round_4;
-	round_4.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 500, 20, 5, 8, 10, 5, 10));
-	round_4.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 500, 20, 6, 8, 10, 5, 10));
-	round_4.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 500, 20, 5, 7, 10, 5, 10));
-	round_4.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 500, 20, 2, 2, 10, 5, 10));
+	round_4.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 5, 8, 10, 5, 10));
+	round_4.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 6, 8, 10, 5, 10));
+	round_4.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 5, 7, 10, 5, 10));
+	round_4.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 2, 2, 10, 5, 10));
 	Param::monstersByRounds.push_back(round_4);
 
 	vector<Monster*> round_5;
-	round_5.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 500, 20, 5, 8, 10, 5, 10));
-	round_5.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 500, 20, 6, 8, 10, 5, 10));
-	round_5.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 500, 20, 5, 7, 10, 5, 10));
-	round_5.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 500, 20, 2, 2, 10, 5, 10));
-	round_5.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 500, 20, 9, 9, 10, 5, 10));
+	round_5.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 5, 8, 10, 5, 10));
+	round_5.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 6, 8, 10, 5, 10));
+	round_5.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 5, 7, 10, 5, 10));
+	round_5.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 2, 2, 10, 5, 10));
+	round_5.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 9, 9, 10, 5, 10));
 	Param::monstersByRounds.push_back(round_5);
 
 
 	//Initialisation des races
 
 
-	Param::races.push_back(new Race("Unskilled", 2, 4, "+5 armor", "+15 armor"));
-	Param::races.push_back(new Race("Braindead", 2, 4, "+5 dmg", "+15 dmg"));
+	Param::races.push_back(new Race("Unskilled", 2, 4, "+50 health", "+100 health"));
+	Param::races.push_back(new Race("Braindead", 2, 4, "+10 attackDamage", "+20 attackDamage"));
 
 
 
 
-
+	//Initialisation des champions
 
 	Param::allChampions.push_back(new Champion("PE", 10, 0, 0, 60, 1, 200, 20, 0, 0, 0, 0, 5, Param::races.at(0), Param::races.at(1)));
 	Param::allChampions.push_back(new Champion("Thomas", 10, 0, 0, 60, 1, 100, 20, 0, 0, 0, 0, 2, Param::races.at(0), Param::races.at(1)));

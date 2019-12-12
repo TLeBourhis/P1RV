@@ -32,6 +32,7 @@ public:
   void reinitChampions();
   std::list<Race*> getRaces();
   int count(Race * race);
+  void applyRaceBonus();
 
 
   //constructeurs

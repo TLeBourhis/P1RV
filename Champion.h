@@ -20,10 +20,8 @@ public:
   void evolve();
   int buy();
   int sell();
-  void moveTo(int _x, int _y);
   void move(Character *target);
   int die();
-  void setColor(){color[0] = Param::championColor[0]; color[1] = Param::championColor[1]; color[2] = Param::championColor[2]; color[3] = Param::championColor[3];};
   //void spell(Monster *monster);
   Race * getRace(int i);
 
@@ -38,6 +36,7 @@ public:
 
   //Accesseurs
   std::string getName() { return name; };
+  int getCost() { return cost; };
 };
 
 #endif /* end of include guard: CHAMPION_H */

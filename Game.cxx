@@ -53,7 +53,7 @@ GLvoid Game::display() {
 	glutSwapBuffers();
 }
 
-GLvoid Game::drawText(float x, float y, int length, const char *text) {
+GLvoid Game::drawText(float x, float y, int length, const char *text, float colorR, float colorV, float colorB) {
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
@@ -61,7 +61,7 @@ GLvoid Game::drawText(float x, float y, int length, const char *text) {
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
-	glColor3f(1.0f, 1.0f, 1.0f);
+	glColor3f(colorR, colorV, colorB);
 	glRasterPos2f(x, y);
 	for (int i = 0; i<length; i++) {
 		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, (int)text[i]);
@@ -85,22 +85,31 @@ GLvoid Game::displayCards() {
 	glDisable(GL_DEPTH_TEST);			// à enlever puis remettre pour afficher le texte par dessus la carte
 
 	list<Champion*>::iterator it = championCards.begin();
+	int space = Param::cardWidth + Param::cardSpace;
 	for (int k = 0; k < 5; k++) { //affichage des 5 cartes de champion
 		if ((*it) != nullptr) {
 			glColor3f(0.8f, 0.8f, 0.8f);
 			glBegin(GL_QUADS);					//affichage de la carte
 			glVertex2f(50.0f + k * space, Param::cardHeightUp);
-		  	glVertex2f(50.0f + k * space, Param::cardHeightDown);
-		  	glVertex2f(200.0f + k * space, Param::cardHeightDown);
-		  	glVertex2f(200.0f + k * space, Param::cardHeightUp);
+			glVertex2f(50.0f + k * space, Param::cardHeightDown);
+			glVertex2f(200.0f + k * space, Param::cardHeightDown);
+			glVertex2f(200.0f + k * space, Param::cardHeightUp);
 			glEnd();
 
 			glColor3f(0.0f, 0.0f, 0.0f);
-			string cardText = (*it)->getName();				//affichage du texte de la carte
-			glRasterPos2f(65.0f + k * space, 200.0f);
-			for (int i = 0; i < cardText.size(); i++) {
-				glutBitmapCharacter(GLUT_BITMAP_9_BY_15, (int)cardText.data()[i]);
-			}
+			string cardText = (*it)->getName();//affichage du texte de la carte
+			drawText(65.0f + k * space, 200.0f, cardText.size(), cardText.data(), 0.0f, 0.0f, 0.0f);
+			string cardCost = std::to_string((*it)->getCost()) + "G";
+			drawText(160.0f + k * space, 200.0f, cardCost.size(), cardCost.data(), 0.0f, 0.0f, 0.0f);
+
+			glColor3f((*it)->getColor(0), (*it)->getColor(1), (*it)->getColor(2));
+			glBegin(GL_QUADS);
+			glVertex2f(60.0f + k * space, Param::cardHeightUp - (Param::cardHeightUp- Param::cardHeightDown)/3);
+			glVertex2f(60.0f + k * space, Param::cardHeightDown + (Param::cardHeightUp - Param::cardHeightDown) / 4);
+			glVertex2f(190.0f + k * space, Param::cardHeightDown + (Param::cardHeightUp - Param::cardHeightDown) / 4);
+			glVertex2f(190.0f + k * space, Param::cardHeightUp - (Param::cardHeightUp - Param::cardHeightDown) / 3);
+			glEnd();
+
 		}
 		advance(it, 1);
 	}
@@ -117,10 +126,10 @@ GLvoid Game::displayCards() {
 GLvoid Game::displayInfo() {
 	std::string goldText = "Gold : ";
 	goldText += std::to_string(getGold());
-	drawText(50.0f, 900.0f, goldText.size(), goldText.data());
+	drawText(50.0f, 900.0f, goldText.size(), goldText.data(), 1.0f, 1.0f, 1.0f);
 	std::string roundText = "Round : ";
 	roundText += std::to_string(getRound());
-	this->drawText(50.0f, 930.0f, roundText.size(), roundText.data());
+	this->drawText(50.0f, 930.0f, roundText.size(), roundText.data(), 1.0f, 1.0f, 1.0f);
 }
 
 GLvoid Game::displayHUD() {
@@ -139,7 +148,7 @@ GLvoid Game::displayRaces() {
 		raceText += to_string(Game::currentInstance->getBoard()->count(*it));
 		raceText += "/";
 		raceText += to_string((*it)->getBonusTreshold(0));
-		drawText(50.0f, 750 - i*30, raceText.size(), raceText.data());
+		drawText(50.0f, 750 - i*30, raceText.size(), raceText.data(), 1.0f, 1.0f, 1.0f);
 		i++;
 	}
 }
@@ -209,20 +218,18 @@ GLvoid Game::souris(int bouton, int etat, int x, int y) {
 	}
 
 
-	if (boutonClick && y > 643) {  //&& test pour voir si x et y correspondent à une partie du HUD
+	if (boutonClick && y > Param::windowHeight - Param::cardHeightUp) {  //&& test pour voir si x et y correspondent à une partie du HUD
 								   //643 c'est une valeur prise empiriquement en étudiant la position de la souris
 		int selec = Game::currentInstance->selectionCards(x, y);
 		if (selec >= 0) {
 			list<Champion*>::iterator itr = Game::currentInstance->championCards.begin();
 			advance(itr, selec);
 			if ((*itr) != nullptr) {
-
 				if (abs((*itr)->buy()) <= Game::currentInstance->getGold()) { //On vérifie si on a assez d'argent
 					Game::currentInstance->getBoard()->addChampion(*itr);
 					Game::currentInstance->addGold((*itr)->buy());
 					(*itr) = nullptr;
 				}
-
 			}
 		}
 	}
@@ -244,34 +251,31 @@ GLvoid Game::deplacementSouris(int x, int y) {
 	Mx = t * (Bx - Ax) + Ax; //on calcule les positions de M  avec t
 	My = 0;
 	Mz = t * (Bz - Az) + Az;
-	if (boutonClick && y < Param::windowHeight - Param::cardHeightUp){ //si on ne clique pas sur le HUD, on test si on sélectionne un champion sur le board
-		
+	if (boutonClick && y < Param::windowHeight - Param::cardHeightUp) { //si on ne clique pas sur le HUD, on test si on sélectionne un champion sur le board
 
-		if (!championDrag){
-			int case_i = (int)(Mx / (Param::dimCase + 2*Param::borderSpacingCase));
-			int case_j = (int)(Mz / (Param::dimCase + 2*Param::borderSpacingCase));
-			champTargeted = Game::currentInstance->getBoard().findChampion(case_i, case_j);//on regarde si un champion est sur la case qu'on vise
-				if (champTargeted != nullptr){
-					championDrag = true;
-				}
+
+		if (!championDrag) {
+			int case_i = (int)(Mx / (Param::dimCase + 2 * Param::borderSpacingCase));
+			int case_j = (int)(Mz / (Param::dimCase + 2 * Param::borderSpacingCase));
+			champTargeted = Game::currentInstance->getBoard()->findChampion(case_i, case_j);//on regarde si un champion est sur la case qu'on vise
+			if (champTargeted != nullptr) {
+				championDrag = true;
+			}
 		}
 		else {
-			champTargeted -> moveTo(Mx, Mz);
+			champTargeted->moveTo(Mx, Mz);
 		}
 	}
-	else if (!boutonClick && championDrag){
+	else if (!boutonClick && championDrag) {
 		championDrag = false;
-		int _i = (int)(Mx / (Param::dimCase + 2*Param::borderSpacingCase));
-		int _j = (int)(Mz / (Param::dimCase + 2*Param::borderSpacingCase));
-		if (currentInstance->getBoard().findChampion(_i, _j) == nullptr){
-			champTargeted->setI(_i);
-			champTargeted->setJ(_j);
+		int _i = (int)(Mx / (Param::dimCase + 2 * Param::borderSpacingCase));
+		int _j = (int)(Mz / (Param::dimCase + 2 * Param::borderSpacingCase));
+		if (currentInstance->getBoard()->findCharacter(_i, _j) == nullptr) {
+			champTargeted->setIJ(_i, _j);
 		}
-		champTargeted -> moveTo((champTargeted->getI())*(Param::dimCase + 2*Param::borderSpacingCase) + Param::borderSpacingCase + Param::dimCase/2, (champTargeted->getJ())*(Param::dimCase + 2*Param::borderSpacingCase) + Param::borderSpacingCase + Param::dimCase/2);
 	}
-
-	// Appeler le re-affichage de la scene OpenGL
 	glutPostRedisplay();
+	
 }
 
 
@@ -280,8 +284,8 @@ void Game::setCards() {
 	list<Champion*>::iterator it;
 	srand(time(NULL));
 	int r;
-	for (int k = 0; k < 5; k++) {
-		r = rand() % 2;
+	for (int k = 0; k < Param::nbCardsOnPick; k++) {
+		r = rand() % Param::allChampions.size();
 		it = Param::allChampions.begin();
 		advance(it, r);
 		championCards.push_back(*it);
@@ -318,8 +322,8 @@ void Game::run() {
 			
 		}
 
+		board->applyRaceBonus();
 		
-
 
 
 

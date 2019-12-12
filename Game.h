@@ -36,7 +36,7 @@ private:
 	GLvoid displayCards();
 	GLvoid displayInfo();
 	GLvoid displayRaces();
-	GLvoid drawText(float x, float y, int length, const char *text);
+	GLvoid drawText(float x, float y, int length, const char *text, float colorR, float colorV, float colorB);
 
 public:
 	static Game* currentInstance;

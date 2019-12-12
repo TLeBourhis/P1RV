@@ -80,23 +80,6 @@ void Champion::fight(list<Character*> allies, list<Character*> ennemies){
 }
 
 
-void Champion::displayCard(int i) const{
-  //Affiche les "cards" du champion lors de la pioche.
-
-
-
-
-  // Effacement du frame buffer
-  //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  //Affichage des bordures de la carte:
-  glColor3f(1.0f,1.0f,1.0f);
-  glBegin(GL_QUADS);
-
-  glEnd();
-
-  glutSwapBuffers();
-}
 
 void Champion::evolve(){
   //Fait evoluer le champion au niveau supérieur et modifie ses stats
@@ -146,7 +129,10 @@ void Champion::move(Character *target){
 	}
 	else {
 		NodeGraph * nextNode = *path.begin();
-		setIJ(nextNode->getI(), nextNode->getJ());
+		if (Game::currentInstance->getBoard()->findCharacter(nextNode->getI(), nextNode->getJ()) == nullptr) {
+			setIJ(nextNode->getI(), nextNode->getJ());
+		}
+		
 	}
 }
 

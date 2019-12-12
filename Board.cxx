@@ -85,7 +85,9 @@ void Board::removeChampion(int indice) {
 }
 
 void Board::addChampion(Champion * champion) {
-	//ATTENTION on ne peut pas avoir 2 PE indépendants pour l'instant
+
+
+	//Ajout des nouveaux champions sur le board à un emplacement vide
 	Champion * newChampion = new Champion(champion);
 	int i = newChampion->getI();
 	int j = newChampion->getJ();
@@ -101,6 +103,8 @@ void Board::addChampion(Champion * champion) {
 }
 
 Champion* Board::findChampion(int _i, int _j) {
+	//ATTENTION : il faudrait faire une fonction find character en plus pour ne pas oublier les monstres
+
 	//Retourne le pointer vers le champion présent sur la case i,j
 	Champion* champ = nullptr;
 	for (list<Champion*>::iterator itr = champions.begin(); itr != champions.end(); itr++) {
@@ -109,6 +113,28 @@ Champion* Board::findChampion(int _i, int _j) {
 		}
 	}
 	return champ;
+}
+
+Character* Board::findCharacter(int _i, int _j) {
+	Character * c = (Character*)findChampion(_i, _j);
+
+	if (c == nullptr) {
+		Monster* m = nullptr;
+		for (list<Monster*>::iterator itr = monsters.begin(); itr != monsters.end(); itr++) {
+			if ((*itr)->getI() == _i && (*itr)->getJ() == _j && (*itr)->isAlive()) {
+				m = (*itr);
+			}
+		}
+
+		c = (Character*)m;
+	}
+	else {
+		if (c->isAlive() == false) {
+			c = nullptr;
+		}
+	}
+
+	return c;
 }
 
 bool Board::fight(){

@@ -75,51 +75,51 @@ void Param::init() {
 	c.push_back(1);
 	c.push_back(0);
 	c.push_back(1);
-	colors.emplace("PE", c);
+	colors.emplace("Cheap Ranged", c);
 	c.clear();
 	c.push_back(0);
 	c.push_back(0);
 	c.push_back(1);
 	c.push_back(1);
-	colors.emplace("Thomas", c);
+	colors.emplace("Cheap CaC", c);
 	c.clear();
 	c.push_back(1);
 	c.push_back(0);
 	c.push_back(0);
 	c.push_back(1);
-	colors.emplace("Esteban", c);
+	colors.emplace("MonstreCac", c);
 
 
 	//Initialisation des monstres
 
 	vector<Monster*> round_1;
-	round_1.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 5, 8, 10, 5, 10));
+	round_1.push_back(new Monster("MonstreCac", 10, 0, 0, 20, 1, 600, 40, 5, 8, 10, 5, 10));
 	Param::monstersByRounds.push_back(round_1);
 
 	vector<Monster*> round_2;
-	round_2.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 5, 8, 10, 5, 10));
-	round_2.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 6, 8, 10, 10, 10));
+	round_2.push_back(new Monster("MonstreCac", 10, 0, 0, 20, 1, 600, 40, 5, 8, 10, 5, 10));
+	round_2.push_back(new Monster("MonstreCac", 10, 0, 0, 20, 1, 600, 40, 6, 8, 10, 10, 10));
 	Param::monstersByRounds.push_back(round_2);
 
 	vector<Monster*> round_3;
-	round_3.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 5, 8, 10, 5, 10));
-	round_3.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 6, 8, 10, 5, 10));
-	round_3.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 5, 7, 10, 5, 10));
+	round_3.push_back(new Monster("MonstreCac", 10, 0, 0, 20, 1, 600, 20, 5, 8, 10, 5, 10));
+	round_3.push_back(new Monster("MonstreCac", 10, 0, 0, 20, 1, 600, 20, 6, 8, 10, 5, 10));
+	round_3.push_back(new Monster("MonstreCac", 10, 0, 0, 20, 1, 600, 20, 5, 7, 10, 5, 10));
 	Param::monstersByRounds.push_back(round_3);
 
 	vector<Monster*> round_4;
-	round_4.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 5, 8, 10, 5, 10));
-	round_4.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 6, 8, 10, 5, 10));
-	round_4.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 5, 7, 10, 5, 10));
-	round_4.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 2, 2, 10, 5, 10));
+	round_4.push_back(new Monster("MonstreCac", 10, 0, 0, 20, 1, 500, 20, 5, 8, 10, 5, 10));
+	round_4.push_back(new Monster("MonstreCac", 10, 0, 0, 20, 1, 500, 20, 6, 8, 10, 5, 10));
+	round_4.push_back(new Monster("MonstreCac", 10, 0, 0, 20, 1, 500, 20, 5, 7, 10, 5, 10));
+	round_4.push_back(new Monster("MonstreCac", 10, 0, 0, 20, 1, 500, 20, 2, 2, 10, 5, 10));
 	Param::monstersByRounds.push_back(round_4);
 
 	vector<Monster*> round_5;
-	round_5.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 5, 8, 10, 5, 10));
-	round_5.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 6, 8, 10, 5, 10));
-	round_5.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 5, 7, 10, 5, 10));
-	round_5.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 2, 2, 10, 5, 10));
-	round_5.push_back(new Monster("Esteban", 10, 0, 0, 20, 1, 1000, 20, 9, 9, 10, 5, 10));
+	round_5.push_back(new Monster("MonstreCac", 10, 0, 0, 20, 1, 500, 20, 5, 8, 10, 5, 10));
+	round_5.push_back(new Monster("MonstreCac", 10, 0, 0, 20, 1, 500, 20, 6, 8, 10, 5, 10));
+	round_5.push_back(new Monster("MonstreCac", 10, 0, 0, 20, 1, 500, 20, 5, 7, 10, 5, 10));
+	round_5.push_back(new Monster("MonstreCac", 10, 0, 0, 20, 1, 500, 20, 2, 2, 10, 5, 10));
+	round_5.push_back(new Monster("MonstreCac", 10, 0, 0, 20, 1, 500, 20, 9, 9, 10, 5, 10));
 	Param::monstersByRounds.push_back(round_5);
 
 
@@ -134,6 +134,9 @@ void Param::init() {
 
 	//Initialisation des champions
 
-	Param::allChampions.push_back(new Champion("PE", 10, 0, 0, 60, 1, 200, 20, 0, 0, 0, 0, 5, Param::races.at(0), Param::races.at(1)));
-	Param::allChampions.push_back(new Champion("Thomas", 10, 0, 0, 60, 1, 100, 20, 0, 0, 0, 0, 2, Param::races.at(0), Param::races.at(1)));
+	Param::allChampions.push_back(new Champion("Cheap Ranged", 10, 0, 0, 70, 1.0, 400, 35, 0, 0, 0, 0, 2, Param::races.at(0), Param::races.at(1)));
+	Param::allChampions.push_back(new Champion("Cheap CaC", 20, 0, 0, 20, 0.9, 500, 20, 0, 0, 0, 0, 2, Param::races.at(0), Param::races.at(1)));
+	//Param::allChampions.push_back(new Champion("Mid Ranged", 20, 0, 0, 50, 1.3, 470, 50, 0, 0, 0, 0, 4, Param::races.at(0), Param::races.at(1)));
+	//Param::allChampions.push_back(new Champion("Tank", 10, 0, 0, 100, 1.5, 400, 80, 0, 0, 0, 0, 5, Param::races.at(0), Param::races.at(1)));
+	//Param::allChampions.push_back(new Champion("Ranged", 10, 0, 0, 100, 1.5, 400, 80, 0, 0, 0, 0, 7, Param::races.at(0), Param::races.at(1)));
 }

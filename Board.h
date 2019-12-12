@@ -25,6 +25,7 @@ public:
   void addChampion(Champion * champion);
   void removeChampion(int indice);
   Champion* findChampion(int _i, int _j);
+  Character* findCharacter(int _i, int _j);
   bool fight();
   GLvoid display();
   void initGraph() {graph = new Graph();};

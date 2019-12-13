@@ -18,6 +18,7 @@ private:
 	bool endGame;
 	bool readyToFight;
 	bool help;
+	bool victory;
 
 	static GLboolean boutonClick;
 	static GLint oldX;
@@ -37,6 +38,7 @@ private:
 	GLvoid displayInfo();
 	GLvoid displayRaces();
 	GLvoid displayHelp();
+	GLvoid displayGameOver();
 	GLvoid drawText(float x, float y, int length, const char *text, float colorR, float colorV, float colorB);
 	GLvoid displayButtons();
 
@@ -56,6 +58,7 @@ public:
 	bool getReadyToFight() { return readyToFight; };
 	void setDisplayHelp(bool b) { help = b; };
 	bool getDisplayHelp() { return help; };
+	bool getVictory() { return victory; };
 
 	void setCards();
 	int selectionCards(int x, int y);

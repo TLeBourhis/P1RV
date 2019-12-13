@@ -76,7 +76,7 @@ GLvoid Game::drawText(float x, float y, int length, const char *text, float colo
 	glColor3f(colorR, colorV, colorB);
 	glRasterPos2f(x, y);
 	for (int i = 0; i<length; i++) {
-		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, (int)text[i]);
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, (int)text[i]);
 	}
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
@@ -214,6 +214,9 @@ GLvoid Game::displayHUD() {
 	displayButtons();
 	if (help) {
 		displayHelp();
+	}
+	if (!victory && endGame) {
+		displayGameOver();
 	}
 }
 
@@ -392,7 +395,8 @@ GLvoid Game::souris(int bouton, int etat, int x, int y) {
 		}
 	}
 
-
+	cout << x << "  " << y << endl;
+	cout << Param::windowHeight - Param::cardHeightUp << endl;
 	if (boutonClick && y > Param::windowHeight - Param::cardHeightUp && !Game::currentInstance->readyToFight) {  //&& test pour voir si x et y correspondent à une partie du HUD
 								   //643 c'est une valeur prise empiriquement en étudiant la position de la souris
 		int selec = Game::currentInstance->selectionCards(x, y);
@@ -478,8 +482,44 @@ int Game::selectionCards(int x, int y) {
 	return k;
 }
 
+GLvoid Game::displayGameOver() {
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0.0f, Param::windowWidth, 0.0f, Param::windowHeight);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	glDisable(GL_DEPTH_TEST);
+
+	glColor3f(0.8f, 0.8f, 0.8f);
+	glBegin(GL_QUADS);					//affichage du fond de la bulle d'aide
+	glVertex2f(Param::windowWidth - 180.0f, Param::windowHeight - 200.0f);
+	glVertex2f(Param::windowWidth - 180.0f, 200.0f);
+	glVertex2f(180.0f, 200.0f);
+	glVertex2f(180.0f, Param::windowHeight - 200.0f);
+	glEnd();
+
+
+
+	//Affichage du texte
+	string message = "U LOST NOOB !";
+	drawText(250.0f, Param::windowHeight - 300.0f, message.size(), message.data(), 0.0f, 0.0f, 0.0f);
+
+
+	glEnable(GL_DEPTH_TEST);
+
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+
+}
+
 void Game::run() {
-	while (endGame != true && round < Param::nbRounds){
+	bool win = true;
+	while (!endGame && round < Param::nbRounds){
 		setCards();
 		cout << "Round : " << round << endl;
 		//Réinitialisation des variables
@@ -502,18 +542,18 @@ void Game::run() {
 
 
 		//Phase de combat
-		bool win = board->fight();
+		win = board->fight();
 
-		/*
 		if (!win) {
-			//Gérer le game over
 			endGame = true;
-		}*/
+		}
 
 
 		//Passage au round suivant
 		round++;
 	}
+
+	victory = win;
 }
 
 

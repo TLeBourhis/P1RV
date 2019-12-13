@@ -12,7 +12,7 @@ using namespace std;
 
 int const Param::windowPositionInitial[2] = {100,0};
 int Param::windowWidth = 1000;
-int Param::windowHeight = 1000;
+int Param::windowHeight = 850;
 float const Param::boardColor[3] = {1.0f,1.0f,1.0f};
 int const Param::nbRows = 10;
 int const Param::nbColumns = 10;
@@ -128,8 +128,8 @@ void Param::init() {
 	//Initialisation des monstres
 
 	vector<Monster*> round_1;
-	round_1.push_back((Monster*)new Boss("BOSS", 30, 30, 0, 20, 1, 5000, 10, 5, 8, 10, 5, 0, 0));
-	//round_1.push_back(new Monster("MonstreCac", 10, 0, 0, 20, 1, 600, 40, 5, 8, 10, 5, 10));
+	//round_1.push_back((Monster*)new Boss("BOSS", 30, 30, 0, 20, 1, 5000, 10, 5, 8, 10, 5, 0, 0));
+	round_1.push_back(new Monster("MonstreCac", 10, 0, 0, 20, 1, 600, 40, 5, 8, 10, 5, 10));
 	Param::monstersByRounds.push_back(round_1);
 
 	vector<Monster*> round_2;

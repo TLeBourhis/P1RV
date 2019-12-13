@@ -71,12 +71,14 @@ void Board::reinitChampions() {
 	int i = 0;
 	int j = 0;
 	for (auto it = champions.begin(); it != champions.end(); it++) {
-		if (i == 10) {
+		if (i == 9) {
 			i = 0;
 			j++;
 		}
+		else {
+			i++;
+		}
 		(*it)->reset(i, j);
-		i++;
 	}
 
 	
@@ -129,11 +131,14 @@ void Board::addChampion(Champion * champion) {
 	int i = newChampion->getI();
 	int j = newChampion->getJ();
 	while (findChampion(i, j) != nullptr) {
-		if (i == 10) {
+		if (i == 9) {
 			i = 0;
 			j++;
 		}
-		i++;
+		else {
+			i++;
+		}
+		
 	}
 
 	//Si on a déjà deux champions du même type sur le board alors on delete les champions sur le board et on evolve le nouveau

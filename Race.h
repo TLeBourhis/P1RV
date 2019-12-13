@@ -27,6 +27,7 @@ public:
 
   std::string getName() { return name; };
   int getBonusTreshold(int i) { return bonusTreshold[i]; };
+  std::string getBonus(int i) { return bonus[i]; };
   void addBonusTo(Champion * c, int i) const;
   int count(std::list<Champion*> champions) const;
 

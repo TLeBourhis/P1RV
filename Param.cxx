@@ -4,7 +4,9 @@
 #include <vector>
 #include "Race.h"
 #include <list>
+#include "Boss.h"
 #include <map>
+#include <iostream>
 
 using namespace std;
 
@@ -79,29 +81,55 @@ int Param::getCardsWidth(){
 void Param::init() {
 	//Initialisation des couleurs
 	vector<float> c;
-	c.push_back(0);
-	c.push_back(1);
-	c.push_back(0);
+	c.push_back(0.33);
+	c.push_back(0.48);
+	c.push_back(0.68);
 	c.push_back(1);
 	colors.emplace("Cheap Ranged", c);
 	c.clear();
-	c.push_back(0);
-	c.push_back(0);
-	c.push_back(1);
+	c.push_back(0.70);
+	c.push_back(0.69);
+	c.push_back(0.57);
 	c.push_back(1);
 	colors.emplace("Cheap CaC", c);
 	c.clear();
+	c.push_back(0.99);
+	c.push_back(0.86);
+	c.push_back(0.07);
 	c.push_back(1);
+	colors.emplace("Mid Ranged", c);
+	c.clear();
+	c.push_back(0.93);
 	c.push_back(0);
 	c.push_back(0);
+	c.push_back(1);
+	colors.emplace("Tank", c);
+	c.clear();
+	c.push_back(0.95);
+	c.push_back(0.99);
+	c.push_back(0.99);
+	c.push_back(1);
+	colors.emplace("Ranged", c);
+	c.clear();
+	c.push_back(0.12);
+	c.push_back(0.63);
+	c.push_back(0.33);
 	c.push_back(1);
 	colors.emplace("MonstreCac", c);
+	c.clear();
+	c.push_back(1.0);
+	c.push_back(0.0);
+	c.push_back(1.0);
+	c.push_back(1);
+	colors.emplace("BOSS", c);
+	
 
 
 	//Initialisation des monstres
 
 	vector<Monster*> round_1;
-	round_1.push_back(new Monster("MonstreCac", 10, 0, 0, 20, 1, 600, 40, 5, 8, 10, 5, 10));
+	round_1.push_back((Monster*)new Boss("BOSS", 30, 30, 0, 20, 1, 5000, 10, 5, 8, 10, 5, 0, 0));
+	//round_1.push_back(new Monster("MonstreCac", 10, 0, 0, 20, 1, 600, 40, 5, 8, 10, 5, 10));
 	Param::monstersByRounds.push_back(round_1);
 
 	vector<Monster*> round_2;
@@ -134,17 +162,17 @@ void Param::init() {
 	//Initialisation des races
 
 
-	Param::races.push_back(new Race("Unskilled", 2, 4, "+50 health", "+100 health"));
-	Param::races.push_back(new Race("Braindead", 2, 4, "+10 attackDamage", "+20 attackDamage"));
+	Param::races.push_back(new Race("Ranged", 2, 4, "+10 attackRange", "+20 attackRange"));
+	Param::races.push_back(new Race("Fighter", 2, 4, "+10 attackDamage", "+25 attackDamage"));
 
 
 
 
 	//Initialisation des champions
 
-	Param::allChampions.push_back(new Champion("Cheap Ranged", 10, 0, 0, 70, 1.0, 400, 35, 0, 0, 0, 4, 2, Param::races.at(0), Param::races.at(1)));
-	//Param::allChampions.push_back(new Champion("Cheap CaC", 20, 0, 0, 20, 0.9, 500, 20, 0, 0, 0, 1, 2, Param::races.at(0), Param::races.at(1)));
-	//Param::allChampions.push_back(new Champion("Mid Ranged", 20, 0, 0, 50, 1.3, 470, 50, 0, 0, 0, 1, 4, Param::races.at(0), Param::races.at(1)));
-	//Param::allChampions.push_back(new Champion("Tank", 10, 0, 0, 100, 1.5, 400, 80, 0, 0, 0, 1, 5, Param::races.at(0), Param::races.at(1)));
-	//Param::allChampions.push_back(new Champion("Ranged", 10, 0, 0, 100, 1.5, 400, 80, 0, 0, 0, 1, 7, Param::races.at(0), Param::races.at(1)));
+	Param::allChampions.push_back(new Champion("Cheap Ranged", 10, 0, 0, 70, 1.0, 400, 35, 0, 0, 0, 1, 2, Param::races.at(0), Param::races.at(1)));
+	Param::allChampions.push_back(new Champion("Cheap CaC", 20, 0, 0, 20, 0.9, 500, 20, 0, 0, 0, 1, 2, Param::races.at(0), Param::races.at(1)));
+	Param::allChampions.push_back(new Champion("Mid Ranged", 20, 0, 0, 50, 1.3, 470, 50, 0, 0, 0, 1, 4, Param::races.at(0), Param::races.at(1)));
+	Param::allChampions.push_back(new Champion("Tank", 30, 0, 0, 20, 0.7, 600, 40, 0, 0, 0, 1, 5, Param::races.at(0), Param::races.at(1)));
+	Param::allChampions.push_back(new Champion("Ranged", 10, 0, 0, 100, 1.5, 400, 80, 0, 0, 0, 1, 7, Param::races.at(0), Param::races.at(1)));
 }

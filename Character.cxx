@@ -58,7 +58,6 @@ float Character::getColor(int i) const {
 
 
 void Character::getHit(int damage, string type) {
-	cout << "attack" << endl;
 	if (type == "ATTACK_DAMAGE") {
 		int dmg = max(damage - armor, 5);
 		health -= dmg;
@@ -73,8 +72,6 @@ void Character::getHit(int damage, string type) {
 			Game::currentInstance->addGold(this->die());
 		}
 	}
-
-	cout << health << endl;
 }
 
 float Character::distance(Character * c) const {

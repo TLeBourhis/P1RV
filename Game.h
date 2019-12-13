@@ -17,6 +17,7 @@ private:
 
 	bool endGame;
 	bool readyToFight;
+	bool help;
 
 	static GLboolean boutonClick;
 	static GLint oldX;
@@ -27,7 +28,6 @@ private:
 	static GLdouble Ay;
 	static GLdouble Az;
 	//Dungeon *dungeon;
-	//std::list<Champion*> champions; //On ne veut pas modifier les champions piochés
 	std::list<Champion*> championCards;
 
 
@@ -36,7 +36,9 @@ private:
 	GLvoid displayCards();
 	GLvoid displayInfo();
 	GLvoid displayRaces();
+	GLvoid displayHelp();
 	GLvoid drawText(float x, float y, int length, const char *text, float colorR, float colorV, float colorB);
+	GLvoid displayButtons();
 
 public:
 	static Game* currentInstance;
@@ -52,6 +54,8 @@ public:
 
 	void setReadyToFight(bool b) {readyToFight = b;};
 	bool getReadyToFight() { return readyToFight; };
+	void setDisplayHelp(bool b) { help = b; };
+	bool getDisplayHelp() { return help; };
 
 	void setCards();
 	int selectionCards(int x, int y);

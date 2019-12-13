@@ -8,6 +8,8 @@
 #include <iterator>
 #include <GL\glew.h>
 #include <GL\freeglut.h>
+#include "Case.h"
+#include <vector>
 
 
 
@@ -19,6 +21,7 @@ private:
   Graph *graph;
   std::list<Champion*> champions;
   std::list<Monster*> monsters;
+  std::vector<Case*> cases;
 
 public:
   void clearMonsters();
@@ -35,6 +38,7 @@ public:
   std::list<Race*> getRaces();
   int count(Race * const  race);
   void applyRaceBonus();
+  void setColorCase(int i, int j, float c1, float c2, float c3);
 
 
   //constructeurs

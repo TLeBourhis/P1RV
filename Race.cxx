@@ -55,7 +55,7 @@ int Race::count(list<Champion*> champions) const{
 void Race::addBonusTo(Champion * c, int i) const{
 	string add = bonus[i].substr(0, bonus[i].find(" "));
 	string caracteristic = bonus[i].substr(bonus[i].find(" ")+1, bonus[i].size());
-	cout << add << "|" << caracteristic << endl;
+
 
 	//Détermination du caracteristic
 	if (caracteristic == "armor") {

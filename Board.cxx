@@ -13,11 +13,18 @@
 #include <iostream>
 #include "Race.h"
 #include <algorithm>
+#include "Case.h"
 
 using namespace std;
 
 
-Board::Board() {};
+Board::Board() {
+	for (int i = 0; i<Param::nbRows; i++) {
+		for (int j = 0; j<Param::nbColumns; j++) {
+			cases.push_back(new Case(j, i));
+		}
+	}
+};
 
 list<Race*> Board::getRaces() {
 	list<Race*> races;
@@ -227,7 +234,6 @@ bool Board::fight(){
 	win = !fightingChampions.empty();
 
 	
-	this_thread::sleep_for(std::chrono::seconds(1));
 	glutSwapBuffers();
 	return win;
 }
@@ -257,17 +263,9 @@ GLvoid Board::display(){
   //dessin des cases
 
 
-  glColor3f(Param::caseColor[0], Param::caseColor[1], Param::caseColor[2]);
-  glBegin(GL_QUADS);
-  for (int i=0; i<Param::nbRows; i++){
-    for (int j=0; j<Param::nbColumns; j++){
-      glVertex3f(j*(Param::dimCase+Param::borderSpacingCase*2)+Param::borderSpacingCase, 0.1f, i*(Param::dimCase+Param::borderSpacingCase*2)+Param::borderSpacingCase);
-      glVertex3f((j+1)*(Param::dimCase+Param::borderSpacingCase*2)-Param::borderSpacingCase, 0.1f,i*(Param::dimCase+Param::borderSpacingCase*2)+Param::borderSpacingCase);
-      glVertex3f((j+1)*(Param::dimCase+Param::borderSpacingCase*2)-Param::borderSpacingCase, 0.1f, (i+1)*(Param::dimCase+Param::borderSpacingCase*2)-Param::borderSpacingCase);
-      glVertex3f(j*(Param::dimCase+Param::borderSpacingCase*2)+Param::borderSpacingCase, 0.1f, (i+1)*(Param::dimCase+Param::borderSpacingCase*2)-Param::borderSpacingCase);
-    }
+  for (auto it = cases.begin(); it != cases.end(); it++) {
+	  (*it)->display();
   }
-  glEnd();
 
   
   for (list<Champion*>::iterator it = champions.begin(); it!= champions.end(); it++){
@@ -280,6 +278,9 @@ GLvoid Board::display(){
 
 }
 
+void Board::setColorCase(int i, int j, float c1, float c2, float c3) {
+	cases.at(i*Param::nbColumns+j)->setColor(c1, c2, c3);
+};
 
 list<NodeGraph*> Board::getShorterPath(int i, int j, Character * target) {
 	return graph->getShorterPath(graph->getNode(i,j),graph->getNode(target->getI(),target->getJ()));

@@ -17,6 +17,8 @@ private:
 
 	bool endGame;
 	bool readyToFight;
+	bool help;
+	bool victory;
 
 	static GLboolean boutonClick;
 	static GLint oldX;
@@ -27,7 +29,6 @@ private:
 	static GLdouble Ay;
 	static GLdouble Az;
 	//Dungeon *dungeon;
-	//std::list<Champion*> champions; //On ne veut pas modifier les champions piochés
 	std::list<Champion*> championCards;
 
 
@@ -37,10 +38,14 @@ private:
 	GLvoid displayInfo();
 	GLvoid displayRaces();
 	GLvoid displayButtons();
+	GLvoid displayHelp();
+	GLvoid displayGameOver();
 	GLvoid drawText(float x, float y, int length, const char *text, float colorR, float colorV, float colorB);
 
 public:
 	static Game* currentInstance;
+	static std::list<Champion*> garbageChampions;
+	static void cleanGarbage();
 	static GLvoid displayCallBack();
 	static GLvoid reshape(int w, int h);
 	static void clavier(unsigned char key, int xx, int yy);
@@ -50,6 +55,10 @@ public:
 	void run();
 
 	void setReadyToFight(bool b) {readyToFight = b;};
+	bool getReadyToFight() { return readyToFight; };
+	void setDisplayHelp(bool b) { help = b; };
+	bool getDisplayHelp() { return help; };
+	bool getVictory() { return victory; };
 
 	void setCards();
 	int selectionCards(int x, int y);

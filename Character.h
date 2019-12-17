@@ -72,12 +72,17 @@ public:
   float getColor(int i) const;
 
   void addArmor(int a) { armor += a; };
+  int getArmor() { return armor; };
   void addMagicResistance(int mr) { magicResistance += mr; };
+  int getMagicResistance() { return magicResistance; };
   void addSpellPower(float sp) { spellPower += sp; };
   void addAttackRange(int ar) { attackRange += ar; };
+  int getAttackRange() { return attackRange; };
   void addHealth(int h) { maxHealth += h; health += h; };
+  int getHealth() { return health; };
   void addAttackSpeed(float as) { attackSpeed += as; };
   void addAttackDamage(int ad) { attackDamage += ad; };
+  int getAttackDamage() { return attackDamage; };
 
 };
 

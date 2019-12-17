@@ -4,13 +4,15 @@
 #include <vector>
 #include "Race.h"
 #include <list>
+#include "Boss.h"
 #include <map>
+#include <iostream>
 
 using namespace std;
 
 int const Param::windowPositionInitial[2] = {100,0};
 int Param::windowWidth = 1000;
-int Param::windowHeight = 815; // !!!!!!adapté à mon pc
+int Param::windowHeight = 815; // !!!!!!adapté à mon pc, 850 d'habitude ou 1000
 float const Param::boardColor[3] = {1.0f,1.0f,1.0f};
 int const Param::nbRows = 10;
 int const Param::nbColumns = 10;
@@ -23,7 +25,7 @@ int const Param::cardSpace = 20;
 float const Param::caseColor[3] = {0.5f,0.5f,0.5f};
 map<string, vector<float>> Param::colors;
 int const Param::nbCardsOnPick = 5; //Nombre de cartes piochées par tour
-float const Param::percentageWidthTakenByCardsPick = 0.8;
+//float const Param::percentageWidthTakenByCardsPick = 0.8;
 float const Param::Cinf = 100;
 int const Param::maxRage = 100; 
 int const Param::rageByHit = 10; 
@@ -32,6 +34,15 @@ int const Param::maxMana = 100;
 int const Param::manaByHit = 10;
 int const Param::sleepTime = 250;
 
+int const Param::healthBonusByLevel = 50;
+int const Param::armorBonusByLevel = 10;
+int const Param::magicResistanceBonusByLevel = 10;
+float const Param::spellPowerBonusByLevel = 0;
+int const Param::attackRangeBonusByLevel = 0;
+float const Param::attackSpeedBonusByLevel = 0;
+int const Param::attackDamageBonusByLevel = 20;
+
+int const Param::levelMax = 4;
 
 int const Param::nbRounds = 5;
 int const Param::startingGolds = 10;
@@ -59,9 +70,9 @@ int Param::getBoardDim(string coordonnee){
     return dim;
 }
 
-int Param::getCardsWidth(){
+/*int Param::getCardsWidth(){
   return percentageWidthTakenByCardsPick*windowWidth/nbCardsOnPick;
-}
+}*/
 
 
 void Param::init() {
@@ -102,9 +113,19 @@ void Param::init() {
 	c.push_back(0.33);
 	c.push_back(1);
 	colors.emplace("MonstreCac", c);
+	c.clear();
+	c.push_back(1.0);
+	c.push_back(0.0);
+	c.push_back(1.0);
+	c.push_back(1);
+	colors.emplace("BOSS", c);
+
+
 	//Initialisation des monstres
 
+
 	vector<Monster*> round_1;
+	//round_1.push_back((Monster*)new Boss("BOSS", 30, 30, 0, 20, 1, 5000, 10, 5, 8, 10, 5, 0, 0));
 	round_1.push_back(new Monster("MonstreCac", 10, 0, 0, 20, 1, 600, 40, 5, 8, 10, 5, 10));
 	Param::monstersByRounds.push_back(round_1);
 
@@ -138,7 +159,7 @@ void Param::init() {
 	//Initialisation des races
 
 
-	Param::races.push_back(new Race("Ranged", 2, 4, "+0.1f attackSpeed", "+0.3 attackSpeed"));
+	Param::races.push_back(new Race("Ranged", 2, 4, "+10 attackRange", "+20 attackRange"));
 	Param::races.push_back(new Race("Fighter", 2, 4, "+10 attackDamage", "+25 attackDamage"));
 
 

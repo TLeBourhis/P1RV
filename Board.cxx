@@ -1,5 +1,6 @@
 #include "Board.h"
 #include "Param.h"
+#include "Game.h"
 #include "Champion.h"
 #include "Monster.h"
 #include "Graph.h"
@@ -12,11 +13,18 @@
 #include <iostream>
 #include "Race.h"
 #include <algorithm>
+#include "Case.h"
 
 using namespace std;
 
 
-Board::Board() {};
+Board::Board() {
+	for (int i = 0; i < Param::nbRows; i++) {
+		for (int j = 0; j < Param::nbColumns; j++) {
+			cases.push_back(new Case(j, i));
+		}
+	}
+};
 
 list<Race*> Board::getRaces() {
 	list<Race*> races;
@@ -33,11 +41,21 @@ list<Race*> Board::getRaces() {
 	return races;
 }
 
-int Board::count(Race * race) {
+int Board::count(Race * const race) {
 	int count = 0;
+	list<string> champNames;
 	for (auto it = champions.begin(); it != champions.end(); it++) {
 		if ((*it)->getRace(0) == race || (*it)->getRace(1) == race) {
-			count++;
+			if (champNames.empty()) {
+				count++;
+				champNames.push_back((*it)->getName());
+			}
+			else {
+				if (find(champNames.begin(), champNames.end(), (*it)->getName()) == champNames.end()) {
+					count++;
+					champNames.push_back((*it)->getName());
+				}
+			}
 		}
 	}
 	return count;
@@ -52,12 +70,14 @@ void Board::reinitChampions() {
 	int i = 0;
 	int j = 0;
 	for (auto it = champions.begin(); it != champions.end(); it++) {
-		if (i == 10) {
+		if (i == 9) {
 			i = 0;
 			j++;
 		}
+		else {
+			i++;
+		}
 		(*it)->reset(i, j);
-		i++;
 	}
 }
 
@@ -78,25 +98,56 @@ void Board::setMonsters(int round) {
 	}
 }
 
-void Board::removeChampion(int indice) {
+void Board::removeChampion(list<Champion*>::iterator it) {
 	//ATTENTION : ça peut delete l'objet sur lequel pointe le pointeur
-	//champions.erase(indice);
+	Game::garbageChampions.push_back(*it);
+	champions.erase(it);
 }
 
 void Board::addChampion(Champion * champion) {
 	//ATTENTION on ne peut pas avoir 2 PE indépendants pour l'instant
+	//Test pour l'évolution
+
+	//On compte le nombre de champion du même type sur le board
+	int count = 0;
+	list<list<Champion*>::iterator> listIteratorToDelete;
+	if (champion->getLevel() != Param::levelMax) {
+		for (auto it = champions.begin(); it != champions.end(); it++) {
+			cout << (*it)->getLevel() << endl;
+			cout << champion->getLevel() << endl;
+			if ((*it)->getName() == champion->getName() && (*it)->getLevel() == champion->getLevel()) {
+				count++;
+				listIteratorToDelete.push_back(it);
+			}
+		}
+	}
+
+	//Ajout des nouveaux champions sur le board à un emplacement vide
 	Champion * newChampion = new Champion(champion);
 	int i = newChampion->getI();
 	int j = newChampion->getJ();
 	while (findChampion(i, j) != nullptr) {
-		if (i == 10) {
+		if (i == 9) {
 			i = 0;
 			j++;
 		}
-		i++;
+		else {
+			i++;
+		}
 	}
-	newChampion->setIJ(i, j);
-	champions.push_back(newChampion);
+
+	//Si on a déjà deux champions du même type sur le board alors on delete les champions sur le board et on evolve le nouveau
+	if (count == 2) {
+		for (auto it = listIteratorToDelete.begin(); it != listIteratorToDelete.end(); it++) {
+			this->removeChampion(*it);
+		}
+		newChampion->evolve();
+		addChampion(newChampion);
+	}
+	else {
+		newChampion->setIJ(i, j);
+		champions.push_back(newChampion);
+	}
 }
 
 Champion* Board::findChampion(int _i, int _j) {
@@ -109,6 +160,29 @@ Champion* Board::findChampion(int _i, int _j) {
 	}
 	return champ;
 }
+
+Character* Board::findCharacter(int _i, int _j) {
+	Character * c = (Character*)findChampion(_i, _j);
+
+	if (c == nullptr) {
+		Monster* m = nullptr;
+		for (list<Monster*>::iterator itr = monsters.begin(); itr != monsters.end(); itr++) {
+			if ((*itr)->getI() == _i && (*itr)->getJ() == _j && (*itr)->isAlive()) {
+				m = (*itr);
+			}
+		}
+
+		c = (Character*)m;
+	}
+	else {
+		if (c->isAlive() == false) {
+			c = nullptr;
+		}
+	}
+
+	return c;
+}
+
 
 bool Board::fight(){
 	//Gère le fight sur le board lors d'un round
@@ -159,7 +233,6 @@ bool Board::fight(){
 	win = !fightingChampions.empty();
 
 	
-	this_thread::sleep_for(std::chrono::seconds(1));
 	glutSwapBuffers();
 	return win;
 }
@@ -189,17 +262,9 @@ GLvoid Board::display(){
   //dessin des cases
 
 
-  glColor3f(Param::caseColor[0], Param::caseColor[1], Param::caseColor[2]);
-  glBegin(GL_QUADS);
-  for (int i=0; i<Param::nbRows; i++){
-    for (int j=0; j<Param::nbColumns; j++){
-      glVertex3f(j*(Param::dimCase+Param::borderSpacingCase*2)+Param::borderSpacingCase, 0.1f, i*(Param::dimCase+Param::borderSpacingCase*2)+Param::borderSpacingCase);
-      glVertex3f((j+1)*(Param::dimCase+Param::borderSpacingCase*2)-Param::borderSpacingCase, 0.1f,i*(Param::dimCase+Param::borderSpacingCase*2)+Param::borderSpacingCase);
-      glVertex3f((j+1)*(Param::dimCase+Param::borderSpacingCase*2)-Param::borderSpacingCase, 0.1f, (i+1)*(Param::dimCase+Param::borderSpacingCase*2)-Param::borderSpacingCase);
-      glVertex3f(j*(Param::dimCase+Param::borderSpacingCase*2)+Param::borderSpacingCase, 0.1f, (i+1)*(Param::dimCase+Param::borderSpacingCase*2)-Param::borderSpacingCase);
-    }
+  for (auto it = cases.begin(); it != cases.end(); it++) {
+	  (*it)->display();
   }
-  glEnd();
 
   
   for (list<Champion*>::iterator it = champions.begin(); it!= champions.end(); it++){
@@ -211,6 +276,10 @@ GLvoid Board::display(){
   }
 
 }
+
+void Board::setColorCase(int i, int j, float c1, float c2, float c3) {
+	cases.at(i*Param::nbColumns + j)->setColor(c1, c2, c3);
+};
 
 
 list<NodeGraph*> Board::getShorterPath(int i, int j, Character * target) {

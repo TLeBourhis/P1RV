@@ -152,7 +152,6 @@ void Champion::display() const{
 		}
 
 		if (level == 1) {
-			cout << "sale pute" << endl;
 			glTranslatef(x, 5.0f, y);
 			glutSolidSphere(rayon, 20, 20);
 		}

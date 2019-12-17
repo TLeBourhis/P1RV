@@ -44,7 +44,7 @@ int const Param::attackDamageBonusByLevel = 20;
 
 int const Param::levelMax = 4;
 
-int const Param::nbRounds = 5;
+int const Param::nbRounds = 6;
 int const Param::startingGolds = 10;
 
 //Les monstres par round
@@ -154,6 +154,10 @@ void Param::init() {
 	round_5.push_back(new Monster("MonstreCac", 10, 0, 0, 20, 1, 500, 20, 2, 2, 10, 5, 10));
 	round_5.push_back(new Monster("MonstreCac", 10, 0, 0, 20, 1, 500, 20, 9, 9, 10, 5, 10));
 	Param::monstersByRounds.push_back(round_5);
+
+	vector<Monster*> round_6;
+	round_1.push_back((Monster*)new Boss("BOSS", 30, 30, 0, 20, 1, 5000, 10, 5, 8, 10, 5, 0, 0));
+	Param::monstersByRounds.push_back(round_6);
 
 
 	//Initialisation des races

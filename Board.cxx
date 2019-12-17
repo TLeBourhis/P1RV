@@ -258,6 +258,12 @@ GLvoid Board::display(){
   glVertex3f(Param::getBoardDim("x"), 0, Param::getBoardDim("y"));
   glVertex3f(0, 0, Param::getBoardDim("y"));
 
+  glVertex3f(0, 0, 0);
+  glVertex3f(Param::getBoardDim("x"), 0, 0);
+  glVertex3f(Param::getBoardDim("x"), -10, 0);
+  glVertex3f(0, -10, 0);
+  
+
   glEnd();
   //dessin des cases
 

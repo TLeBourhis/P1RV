@@ -83,7 +83,9 @@ void Monster::move(Character *target){
 	else {
 		NodeGraph * nextNode = *path.begin();
 
-		setIJ(nextNode->getI(), nextNode->getJ());
+		if (Game::currentInstance->getBoard()->findCharacter(nextNode->getI(), nextNode->getJ()) == nullptr) {
+			setIJ(nextNode->getI(), nextNode->getJ());
+		}
 	}
 };
 

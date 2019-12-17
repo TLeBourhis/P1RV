@@ -1,22 +1,23 @@
 #include "Race.h"
 
-#include "Champion.h";
+#include "Champion.h"
+#include "Game.h"
 #include <iostream>
 
 using namespace std;
 
-Race::Race(string _name, int _bT1, int _bT2, string _b1, string _b2){
-   name = _name;
+Race::Race(string _name, int _bT1, int _bT2, string _b1, string _b2) {
+	name = _name;
 
-   bonusTreshold[0] = _bT1;
-   bonusTreshold[1] = _bT2;
-   bonus[0] = _b1;
-   bonus[1] = _b2;
+	bonusTreshold[0] = _bT1;
+	bonusTreshold[1] = _bT2;
+	bonus[0] = _b1;
+	bonus[1] = _b2;
 }
 
-void Race::addBonus(list<Champion*> champions) const{
+void Race::addBonus(list<Champion*> champions) const {
 	list<Champion*> champs = this->getChampionsFromRace(champions);
-	int n = champs.size();
+	int n = count(champs);
 	if (n >= bonusTreshold[0]) {
 		if (n >= bonusTreshold[1]) {
 			//On applique le bonus[1]
@@ -33,10 +34,28 @@ void Race::addBonus(list<Champion*> champions) const{
 	}
 }
 
+int Race::count(list<Champion*> champions) const {
+	int count = 0;
+	list<string> champNames;
+	for (auto it = champions.begin(); it != champions.end(); it++) {
+		if (champNames.empty()) {
+			count++;
+			champNames.push_back((*it)->getName());
+		}
+		else {
+			if (find(champNames.begin(), champNames.end(), (*it)->getName()) == champNames.end()) {
+				count++;
+				champNames.push_back((*it)->getName());
+			}
+		}
+	}
+	return count;
+}
+
 void Race::addBonusTo(Champion * c, int i) const {
 	string add = bonus[i].substr(0, bonus[i].find(" "));
 	string caracteristic = bonus[i].substr(bonus[i].find(" ") + 1, bonus[i].size());
-	cout << add << "|" << caracteristic << endl;
+
 
 	//Détermination du caracteristic
 	if (caracteristic == "armor") {
@@ -73,8 +92,7 @@ list<Champion*> Race::getChampionsFromRace(list<Champion*> champions) const {
 }
 
 
-
-void Race::display() const{
+void Race::display() const {
 
 }
 

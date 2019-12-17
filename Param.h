@@ -29,7 +29,7 @@ public:
   static const float caseColor[3];
   static const int nbCardsOnPick;
   static const int cardsHeight;
-  static const float percentageWidthTakenByCardsPick;
+  //static const float percentageWidthTakenByCardsPick;
   static std::map<std::string, std::vector<float>> colors;
   static const float Cinf; //Constante utilisé dans le calcul du poids des connexions dans le graphe d'adjacence
   static std::vector<std::vector<Monster*>> monstersByRounds; //A initialiser correctement
@@ -40,6 +40,15 @@ public:
   static const int manaByHit; //Gain de mana par aa = 10
   static const int sleepTime;
 
+  static const int healthBonusByLevel;
+  static const int armorBonusByLevel;
+  static const int magicResistanceBonusByLevel;
+  static const float spellPowerBonusByLevel;
+  static const int attackRangeBonusByLevel;
+  static const float attackSpeedBonusByLevel;
+  static const int attackDamageBonusByLevel;
+
+  static const int levelMax;
   
   static const int nbRounds;
   static const int startingGolds;
@@ -49,7 +58,7 @@ public:
 
 
   static int getBoardDim(std::string coordonnee);
-  static int getCardsWidth();
+  //static int getCardsWidth();
   static void init();
 };
 

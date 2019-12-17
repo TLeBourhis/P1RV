@@ -83,7 +83,21 @@ void Champion::fight(list<Character*> allies, list<Character*> ennemies){
 
 void Champion::evolve(){
   //Fait evoluer le champion au niveau supérieur et modifie ses stats
+	level++;
+	this->reset(i, j);
+}
 
+void Champion::reset(int _i, int _j) {
+	alive = true;
+	health = initialHealth + Param::healthBonusByLevel * (level - 1);
+	maxHealth = health;
+	setIJ(_i, _j);
+	armor = initialArmor + Param::armorBonusByLevel * (level - 1);
+	magicResistance = initialMagicResistance + Param::magicResistanceBonusByLevel * (level - 1);
+	spellPower = initialSpellPower + Param::spellPowerBonusByLevel * (level - 1);
+	attackRange = initialAttackRange + Param::attackRangeBonusByLevel * (level - 1);
+	attackSpeed = initialAttackSpeed + Param::attackSpeedBonusByLevel * (level - 1);
+	attackDamage = initialAttackDamage + Param::attackDamageBonusByLevel * (level - 1);
 }
 
 int Champion::buy(){
@@ -107,13 +121,40 @@ void Champion::display() const{
 
 		glColor4f(color[0], color[1], color[2], color[3]);
 
-		
-		glTranslatef(x, 5.0f, y);
-		float rayon = (float)health/(float)maxHealth*4+1;
+		float rayon = (float)health / (float)maxHealth * 4 + 1;
+		float rlevel = rayon / 2;
 
+		if (level == 4) {
+			glTranslatef(x - rlevel - 0.5, rlevel, y - rlevel - 0.5);
+			glutSolidSphere(rlevel, 20, 20);
+			glTranslatef(2 * rlevel + 1, 0, 0);
+			glutSolidSphere(rlevel, 20, 20);
+			glTranslatef(0, 0, 2 * rlevel + 1);
+			glutSolidSphere(rlevel, 20, 20);
+			glTranslatef(-2 * rlevel - 1, 0, 0);
+			glutSolidSphere(rlevel, 20, 20);
+		}
 
+		if (level == 3) {
+			glTranslatef(x - rlevel - 0.5, rlevel, y - rlevel - 0.5);
+			glutSolidSphere(rlevel, 20, 20);
+			glTranslatef(2 * rlevel + 1, 0, 0);
+			glutSolidSphere(rlevel, 20, 20);
+			glTranslatef(-rlevel - 1, 0, 2 * rlevel + 1);
+			glutSolidSphere(rlevel, 20, 20);
+		}
 		
-		glutSolidSphere(rayon, 20, 20);
+		if (level == 2) {
+			glTranslatef(x - rlevel - 0.5, rlevel, y);
+			glutSolidSphere(rlevel, 20, 20);
+			glTranslatef(2 * rlevel + 1, 0, 0);
+			glutSolidSphere(rlevel, 20, 20);
+		}
+
+		if (level == 1) {
+			glTranslatef(x, 5.0f, y);
+			glutSolidSphere(rayon, 20, 20);
+		}
 
 		glPopMatrix();
 	}
@@ -127,7 +168,9 @@ void Champion::move(Character *target){
 	}
 	else {
 		NodeGraph * nextNode = *path.begin();
-		setIJ(nextNode->getI(), nextNode->getJ());
+		if (Game::currentInstance->getBoard()->findCharacter(nextNode->getI(), nextNode->getJ()) == nullptr) {
+			setIJ(nextNode->getI(), nextNode->getJ());
+		}
 	}
 }
 

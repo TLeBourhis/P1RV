@@ -64,7 +64,7 @@ void Graph::update() {
 	//Update des nodes
 	for (auto it = nodes.begin(); it != nodes.end(); it++) {
 		//Modifications des character présents sur les noeuds
-		(*it)->setCharacter(Game::currentInstance->getBoard()->findChampion((*it)->getI(), (*it)->getJ()));
+		(*it)->setCharacter(Game::currentInstance->getBoard()->findCharacter((*it)->getI(), (*it)->getJ()));
 	}
 
 	//Update des edges

@@ -20,6 +20,7 @@ private:
 	bool help;
 	bool victory;
 
+
 	static GLboolean boutonClick;
 	static GLint oldX;
 	static GLint oldY;

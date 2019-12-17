@@ -27,7 +27,7 @@ public:
   static const float caseColor[3];
   static const int nbCardsOnPick;
   static const int cardsHeight;
-  static const float percentageWidthTakenByCardsPick;
+  //static const float percentageWidthTakenByCardsPick;
   static std::map<std::string,std::vector<float>> colors;
   static const float Cinf; //Constante utilisé dans le calcul du poids des connexions dans le graphe d'adjacence
   static std::vector<std::vector<Monster*>> monstersByRounds; //A initialiser correctement
@@ -62,7 +62,7 @@ public:
 
 
   static int getBoardDim(std::string coordonnee);
-  static int getCardsWidth();
+  //static int getCardsWidth();
   static void init();
 };
 

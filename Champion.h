@@ -14,7 +14,7 @@ private:
   int cost;
 
 public:
-  virtual void display() const;
+  void display() const; 
   void fight(std::list<Character*> allies, std::list<Character*> ennemies);
   void evolve();
   int buy();

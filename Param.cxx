@@ -21,7 +21,7 @@ int const Param::borderSpacingCase = 2;
 float const Param::caseColor[3] = {0.5f,0.5f,0.5f};
 map<string, vector<float>> Param::colors;
 int const Param::nbCardsOnPick = 5; //Nombre de cartes piochées par tour
-float const Param::percentageWidthTakenByCardsPick = 0.8;
+//float const Param::percentageWidthTakenByCardsPick = 0.8;
 float const Param::Cinf = 100;
 int const Param::maxRage = 100; 
 int const Param::rageByHit = 10; 
@@ -73,9 +73,9 @@ int Param::getBoardDim(string coordonnee){
     return dim;
 }
 
-int Param::getCardsWidth(){
+/*int Param::getCardsWidth(){
   return percentageWidthTakenByCardsPick*windowWidth/nbCardsOnPick;
-}
+}*/
 
 
 void Param::init() {

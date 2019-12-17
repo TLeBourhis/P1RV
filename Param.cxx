@@ -167,9 +167,9 @@ void Param::init() {
 	//Initialisation des champions
 
 
-	Param::allChampions.push_back(new Champion("Cheap Ranged", 10, 0, 0, 70, 1.0, 400, 35, 0, 0, 0, 0, 2, Param::races.at(0), Param::races.at(1)));
-	Param::allChampions.push_back(new Champion("Cheap CaC", 20, 0, 0, 20, 0.9, 500, 20, 0, 0, 0, 0, 2, Param::races.at(0), Param::races.at(1)));
-	Param::allChampions.push_back(new Champion("Mid Ranged", 20, 0, 0, 50, 1.3, 470, 50, 0, 0, 0, 0, 4, Param::races.at(0), Param::races.at(1)));
-	Param::allChampions.push_back(new Champion("Tank", 30, 0, 0, 20, 0.7, 600, 40, 0, 0, 0, 0, 5, Param::races.at(0), Param::races.at(1)));
-	Param::allChampions.push_back(new Champion("Ranged", 10, 0, 0, 100, 1.5, 400, 80, 0, 0, 0, 0, 7, Param::races.at(0), Param::races.at(1)));
+	Param::allChampions.push_back(new Champion("Cheap Ranged", 10, 0, 0, 70, 1.0, 400, 35, 0, 0, 0, 1, 2, Param::races.at(0), Param::races.at(1)));
+	Param::allChampions.push_back(new Champion("Cheap CaC", 20, 0, 0, 20, 0.9, 500, 20, 0, 0, 0, 1, 2, Param::races.at(0), Param::races.at(1)));
+	Param::allChampions.push_back(new Champion("Mid Ranged", 20, 0, 0, 50, 1.3, 470, 50, 0, 0, 0, 1, 4, Param::races.at(0), Param::races.at(1)));
+	Param::allChampions.push_back(new Champion("Tank", 30, 0, 0, 20, 0.7, 600, 40, 0, 0, 0, 1, 5, Param::races.at(0), Param::races.at(1)));
+	Param::allChampions.push_back(new Champion("Ranged", 10, 0, 0, 100, 1.5, 400, 80, 0, 0, 0, 1, 7, Param::races.at(0), Param::races.at(1)));
 }

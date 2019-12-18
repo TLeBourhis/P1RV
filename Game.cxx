@@ -22,7 +22,7 @@ GLboolean Game::championDrag = false;
 Champion* Game::champTargeted = nullptr;
 GLdouble Game::Ax = Param::getBoardDim("x") / 2; //coordonn�es de la cam�ra
 GLdouble Game::Ay = 100;
-GLdouble Game::Az = -50;
+GLdouble Game::Az = -80;
 
 Game::Game() {
 	Param::init();
@@ -148,7 +148,7 @@ GLvoid Game::displayButtons() {
 		glDisable(GL_DEPTH_TEST);
 
 		glColor3f(0.8f, 0.8f, 0.8f);
-		glBegin(GL_QUADS);					//affichage de la carte
+		glBegin(GL_QUADS);	
 		glVertex2f(Param::windowWidth - 180.0f, Param::windowHeight - 50.0f);
 		glVertex2f(Param::windowWidth - 180.0f, Param::windowHeight - 110.0f);
 		glVertex2f(Param::windowWidth - 50.0f, Param::windowHeight - 110.0f);
@@ -158,17 +158,12 @@ GLvoid Game::displayButtons() {
 		string message = "READY";
 		drawText(Param::windowWidth - 140.0f, Param::windowHeight - 85.0f, message.size(), message.data(), 0.0f, 0.0f, 0.0f);
 
-		glEnable(GL_DEPTH_TEST);
-
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-		glPopMatrix();
+	
 	}
 
 
 	glColor3f(0.8f, 0.8f, 0.8f);
-	glBegin(GL_QUADS);					//affichage de la carte
+	glBegin(GL_QUADS);	
 	glVertex2f(Param::windowWidth - 320.0f, Param::windowHeight - 50.0f);
 	glVertex2f(Param::windowWidth - 320.0f, Param::windowHeight - 110.0f);
 	glVertex2f(Param::windowWidth - 190.0f, Param::windowHeight - 110.0f);
@@ -384,7 +379,7 @@ GLvoid Game::souris(int bouton, int etat, int x, int y) {
 	//TODO
 
 	//Projection des coordonnées de la souris sur le plan du board
-	GLdouble Bx, By, Bz; //coordon�es de a souris sur le plan de l'écran
+	GLdouble Bx, By, Bz; //coordonees de la souris sur le plan de l'écran
 	GLdouble Mx, My, Mz, t; //point d'intersection du 'rayon' de la souris et du plan du board
 	Bx = x;
 	GLint viewport[4];
@@ -392,8 +387,8 @@ GLvoid Game::souris(int bouton, int etat, int x, int y) {
 	glGetDoublev(GL_MODELVIEW_MATRIX, mvmatrix);
 	glGetDoublev(GL_PROJECTION_MATRIX, projmatrix);
 	glGetIntegerv(GL_VIEWPORT, viewport);
-	gluUnProject(x, viewport[3] - y, 0, mvmatrix, projmatrix, viewport, &Bx, &By, &Bz); // ici x et y sont les coordonn�es de ma souris captur�es avec SDL
-	t = -Ay / (By - Ay); // on calcule t en fonction de la position de la camera(Az) et de (Bz)
+	gluUnProject(x, viewport[3] - y, 0, mvmatrix, projmatrix, viewport, &Bx, &By, &Bz); // ici x et y sont les coordonnees de ma souris capturees avec SDL
+	t = -Ay / (By - Ay); // on calcule t en fonction de la position de la camera(Ay) et de (By)
 	Mx = t * (Bx - Ax) + Ax; //on calcule les positions de M  avec t
 	My = 0;
 	Mz = t * (Bz - Az) + Az;
@@ -406,7 +401,8 @@ GLvoid Game::souris(int bouton, int etat, int x, int y) {
 			   // si on relache le bouton gauche
 			   // TODO
 			boutonClick = false;
-			if (championDrag) {
+			if (championDrag && Mz < 9 * (Param::dimCase + 2 * Param::borderSpacingCase) + Param::borderSpacingCase + Param::dimCase / 2 && Mz > Param::borderSpacingCase + Param::dimCase / 2
+				&& Mx > Param::borderSpacingCase + Param::dimCase / 2 && Mx < 9 * (Param::dimCase + 2 * Param::borderSpacingCase) + Param::borderSpacingCase + Param::dimCase / 2) {
 				championDrag = false;
 				int _i = (int)(Mx / (Param::dimCase + 2 * Param::borderSpacingCase));
 				int _j = (int)(Mz / (Param::dimCase + 2 * Param::borderSpacingCase));
@@ -460,7 +456,9 @@ GLvoid Game::deplacementSouris(int x, int y) {
 	Mx = t * (Bx - Ax) + Ax; //on calcule les positions de M  avec t
 	My = 0;
 	Mz = t * (Bz - Az) + Az;
-	if (boutonClick && !Game::currentInstance->readyToFight && y < Param::windowHeight - Param::cardHeightUp) { //si on ne clique pas sur le HUD, on test si on sélectionne un champion sur le board
+	if (boutonClick && !Game::currentInstance->readyToFight
+			&& Mz < 9 * (Param::dimCase + 2 * Param::borderSpacingCase) + Param::borderSpacingCase + Param::dimCase / 2 && Mz > Param::borderSpacingCase + Param::dimCase / 2
+			&& Mx > Param::borderSpacingCase + Param::dimCase / 2 && Mx < 9 * (Param::dimCase + 2 * Param::borderSpacingCase) + Param::borderSpacingCase + Param::dimCase / 2) { //si on ne clique pas sur le HUD, on test si on sélectionne un champion sur le board
 		if (!championDrag) {
 			int case_i = (int)(Mx / (Param::dimCase + 2 * Param::borderSpacingCase));
 			int case_j = (int)(Mz / (Param::dimCase + 2 * Param::borderSpacingCase));

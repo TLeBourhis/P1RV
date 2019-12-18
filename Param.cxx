@@ -44,7 +44,7 @@ int const Param::attackDamageBonusByLevel = 20;
 
 int const Param::levelMax = 4;
 
-int const Param::nbRounds = 5;
+int const Param::nbRounds = 6;
 int const Param::startingGolds = 10;
 
 //Les monstres par round
@@ -155,6 +155,10 @@ void Param::init() {
 	round_5.push_back(new Monster("MonstreCac", 10, 0, 0, 20, 1, 500, 20, 9, 9, 10, 5, 10));
 	Param::monstersByRounds.push_back(round_5);
 
+	vector<Monster*> round_6;
+	round_1.push_back((Monster*)new Boss("BOSS", 30, 30, 0, 20, 1, 5000, 10, 5, 8, 10, 5, 0, 0));
+	Param::monstersByRounds.push_back(round_6);
+
 
 	//Initialisation des races
 
@@ -167,9 +171,9 @@ void Param::init() {
 	//Initialisation des champions
 
 
-	Param::allChampions.push_back(new Champion("Cheap Ranged", 10, 0, 0, 70, 1.0, 400, 35, 0, 0, 0, 0, 2, Param::races.at(0), Param::races.at(1)));
-	Param::allChampions.push_back(new Champion("Cheap CaC", 20, 0, 0, 20, 0.9, 500, 20, 0, 0, 0, 0, 2, Param::races.at(0), Param::races.at(1)));
-	Param::allChampions.push_back(new Champion("Mid Ranged", 20, 0, 0, 50, 1.3, 470, 50, 0, 0, 0, 0, 4, Param::races.at(0), Param::races.at(1)));
-	Param::allChampions.push_back(new Champion("Tank", 30, 0, 0, 20, 0.7, 600, 40, 0, 0, 0, 0, 5, Param::races.at(0), Param::races.at(1)));
-	Param::allChampions.push_back(new Champion("Ranged", 10, 0, 0, 100, 1.5, 400, 80, 0, 0, 0, 0, 7, Param::races.at(0), Param::races.at(1)));
+	Param::allChampions.push_back(new Champion("Cheap Ranged", 10, 0, 0, 70, 1.0, 400, 35, 0, 0, 0, 1, 2, Param::races.at(0), Param::races.at(1)));
+	Param::allChampions.push_back(new Champion("Cheap CaC", 20, 0, 0, 20, 0.9, 500, 20, 0, 0, 0, 1, 2, Param::races.at(0), Param::races.at(1)));
+	Param::allChampions.push_back(new Champion("Mid Ranged", 20, 0, 0, 50, 1.3, 470, 50, 0, 0, 0, 1, 4, Param::races.at(0), Param::races.at(1)));
+	Param::allChampions.push_back(new Champion("Tank", 30, 0, 0, 20, 0.7, 600, 40, 0, 0, 0, 1, 5, Param::races.at(0), Param::races.at(1)));
+	Param::allChampions.push_back(new Champion("Ranged", 10, 0, 0, 100, 1.5, 400, 80, 0, 0, 0, 1, 7, Param::races.at(0), Param::races.at(1)));
 }

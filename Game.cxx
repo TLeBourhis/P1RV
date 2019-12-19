@@ -63,9 +63,6 @@ GLvoid Game::display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	board->display();
 	this->displayHUD();
-	if (endGame) {
-		displayGameOver();
-	}
 	glutSwapBuffers();
 }
 
@@ -209,7 +206,10 @@ GLvoid Game::displayHUD() {
 		displayHelp();
 	}
 	if (!victory && endGame) {
-		displayGameOver();
+		//displayGameOver();
+	}
+	if (endGame && victory) {
+		//displayWin();
 	}
 }
 
@@ -314,6 +314,43 @@ GLvoid Game::displayRaces() {
 	}
 }
 
+
+GLvoid Game::displayWin() {
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0.0f, Param::windowWidth, 0.0f, Param::windowHeight);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	glDisable(GL_DEPTH_TEST);
+
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glBegin(GL_QUADS);
+	glVertex2f(0.0f, 0.0f);
+	glVertex2f(Param::windowWidth, 0.0f);
+	glVertex2f(Param::windowWidth, Param::windowHeight);
+	glVertex2f(0.0f, Param::windowHeight);
+	glEnd();
+
+	string message = "WIIIIIIIIIIIIIIIINER";
+	drawText(Param::windowWidth / 2 - 100, Param::windowHeight / 2 + 40, message.size(), message.data(), 1.0f, 1.0f, 1.0f);
+	string nbRounds = "Tu as passe " + to_string(getRound() - 1) + " round";	//?????
+	if (getRound() > 2) {
+		nbRounds += "s";
+	}
+	drawText(Param::windowWidth / 2 - 200, Param::windowHeight / 2 - 40, nbRounds.size(), nbRounds.data(), 1.0f, 1.0f, 1.0f);
+
+	glEnable(GL_DEPTH_TEST);
+
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+}
+
+
 //Affichage de l'écran de défaite
 GLvoid Game::displayGameOver() {
 	glMatrixMode(GL_PROJECTION);
@@ -327,7 +364,7 @@ GLvoid Game::displayGameOver() {
 	glDisable(GL_DEPTH_TEST);
 
 	glColor3f(0.0f, 0.0f, 0.0f);
-	glBegin(GL_QUADS);					//affichage de la carte
+	glBegin(GL_QUADS);					
 	glVertex2f(0.0f, 0.0f);
 	glVertex2f(Param::windowWidth, 0.0f);
 	glVertex2f(Param::windowWidth, Param::windowHeight);
@@ -396,7 +433,8 @@ void Game::clavier(unsigned char key, int xx, int yy) {
 		break;
 
 	/*case 's':
-		Game::currentInstance->setReadyToFight(true);*/
+		Game::currentInstance->setReadyToFight(true);
+		break;*/
 	}
 }
 
@@ -561,6 +599,8 @@ void Game::run() {
 		//Passage au round suivant
 		round++;
 	}
+
+	endGame = true;
 	victory = win;
 }
 

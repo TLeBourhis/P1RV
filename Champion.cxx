@@ -132,28 +132,7 @@ void Champion::display() const{
 		float rayon = (float)health / (float)maxHealth * 4 + 1;
 		float rlevel = rayon / 2;
 		
-		glTranslatef(x, rayon, y);
-		glutSolidSphere(rayon, 20, 20);
-		glBegin(GL_TRIANGLES);
-			 glVertex3f(0.8*rayon, 0.7*rayon, 0);
-			 glVertex3f(0.5*rayon, -0.2*rayon, 0);
-			 glVertex3f(1.5*rayon, -0.2*rayon, 0.5*rayon); //point "main"
-			glEnd();
-			glBegin(GL_TRIANGLES);
-			 glVertex3f(0.8*rayon, 0.7*rayon, 0);
-			 glVertex3f(0.5*rayon, 0.7*rayon, 0.5*rayon);
-			 glVertex3f(1.5*rayon, -0.2*rayon, 0.5*rayon);//point "main"
-			glEnd();
-			glBegin(GL_TRIANGLES);
-			 glVertex3f(-0.8*rayon, 0.7*rayon, 0);
-			 glVertex3f(-0.5*rayon, -0.2*rayon, 0);
-			 glVertex3f(-1.5*rayon, -0.2*rayon, 0.5*rayon);//point "main"
-			glEnd();
-			glBegin(GL_TRIANGLES);
-			 glVertex3f(-0.8*rayon, 0.7*rayon, 0);
-			 glVertex3f(-0.5*rayon, 0.7*rayon, 0.5*rayon);
-			 glVertex3f(-1.5*rayon, -0.2*rayon, 0.5*rayon);//point "main"
-			glEnd();
+		
 
 		glTranslatef(x, rayon, y);
 		glutSolidSphere(rayon, 20, 20);
@@ -206,8 +185,10 @@ void Champion::display() const{
 		}
 
 		if (level == 1) {
+			
 			glTranslatef(0, 1.5*rayon, 0);
 			glutSolidSphere(rayon/2, 20, 20);
+			
 		}
 
 		glPopMatrix();

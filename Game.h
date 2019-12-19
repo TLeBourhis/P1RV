@@ -40,6 +40,7 @@ private:
 	GLvoid displayButtons();
 	GLvoid displayHelp();
 	GLvoid displayGameOver();
+	GLvoid displayWin();
 	GLvoid drawText(float x, float y, int length, const char *text, float colorR, float colorV, float colorB);
 
 public:

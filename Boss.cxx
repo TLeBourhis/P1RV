@@ -99,3 +99,23 @@ void Boss::spell1(list<Character*> ennemies){
 	  }
   }
 }
+
+void Boss::display() const {
+	if (alive) {
+		glMatrixMode(GL_MODELVIEW);
+
+		glPushMatrix();
+
+		glLoadIdentity();
+
+		glColor4f(color[0], color[1], color[2], color[3]);
+
+
+		float rayon = (float)health / (float)maxHealth * 4 + 1;
+		glTranslatef(i*(2 * Param::borderSpacingCase + Param::dimCase) + Param::borderSpacingCase + Param::dimCase / 2, 3 * rayon, j*(2 * Param::borderSpacingCase + Param::dimCase) + Param::borderSpacingCase + Param::dimCase / 2);
+
+		glutSolidTeapot(3 * rayon);
+
+		glPopMatrix();
+	}
+}

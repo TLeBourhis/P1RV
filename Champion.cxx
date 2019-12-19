@@ -74,7 +74,12 @@ void Champion::fight(list<Character*> allies, list<Character*> ennemies){
 		}
 		else {
 			//Attaque de l'ennemi
-			nearestEnnemy->getHit(attackDamage, "ATTACK_DAMAGE");
+			if (attackDamage > 0) {
+				nearestEnnemy->getHit(attackDamage, "ATTACK_DAMAGE");
+			}
+			if (spellPower > 0) {
+				nearestEnnemy->getHit(spellPower, "MAGIC_DAMAGE");
+			}
 		}
 	}
 	
@@ -150,6 +155,29 @@ void Champion::display() const{
 			 glVertex3f(-1.5*rayon, -0.2*rayon, 0.5*rayon);//point "main"
 			glEnd();
 
+		glTranslatef(x, rayon, y);
+		glutSolidSphere(rayon, 20, 20);
+		glBegin(GL_TRIANGLES);
+		glVertex3f(0.8*rayon, 0.7*rayon, 0);
+		glVertex3f(0.5*rayon, -0.2*rayon, 0);
+		glVertex3f(1.5*rayon, -0.2*rayon, 0.5*rayon); //point "main"
+		glEnd();
+		glBegin(GL_TRIANGLES);
+		glVertex3f(0.8*rayon, 0.7*rayon, 0);
+		glVertex3f(0.5*rayon, 0.7*rayon, 0.5*rayon);
+		glVertex3f(1.5*rayon, -0.2*rayon, 0.5*rayon);//point "main"
+		glEnd();
+		glBegin(GL_TRIANGLES);
+		glVertex3f(-0.8*rayon, 0.7*rayon, 0);
+		glVertex3f(-0.5*rayon, -0.2*rayon, 0);
+		glVertex3f(-1.5*rayon, -0.2*rayon, 0.5*rayon);//point "main"
+		glEnd();
+		glBegin(GL_TRIANGLES);
+		glVertex3f(-0.8*rayon, 0.7*rayon, 0);
+		glVertex3f(-0.5*rayon, 0.7*rayon, 0.5*rayon);
+		glVertex3f(-1.5*rayon, -0.2*rayon, 0.5*rayon);//point "main"
+		glEnd();
+
 		if (level == 4) {
 			glTranslatef(-rlevel - 0.5, 0.8*rayon + rlevel, -rlevel - 0.5);
 			glutSolidSphere(rlevel, 20, 20);
@@ -169,9 +197,9 @@ void Champion::display() const{
 			glTranslatef(-rlevel - 1, 0, 2 * rlevel + 1);
 			glutSolidSphere(rlevel, 20, 20);
 		}
-		
+
 		if (level == 2) {
-			glTranslatef(- rlevel - 0.5, 0.8*rayon + rlevel, 0);
+			glTranslatef(-rlevel - 0.5, 0.8*rayon + rlevel, 0);
 			glutSolidSphere(rlevel, 20, 20);
 			glTranslatef(2 * rlevel + 1, 0, 0);
 			glutSolidSphere(rlevel, 20, 20);

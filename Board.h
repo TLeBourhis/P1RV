@@ -39,6 +39,7 @@ public:
   int count(Race * const race);
   void applyRaceBonus();
   void setColorCase(int i, int j, float c1, float c2, float c3);
+  std::list<Champion*> getChampions() { return champions; };
 
 
   //constructeurs

@@ -101,6 +101,7 @@ void Boss::spell1(list<Character*> ennemies){
   }
 }
 
+
 void Boss::display() const{
 	if (alive) {
 		glMatrixMode(GL_MODELVIEW);
@@ -113,6 +114,7 @@ void Boss::display() const{
 
 
 		float rayon = (float)health / (float)maxHealth * 4 + 1;
+
 		glTranslatef(i*(2 * Param::borderSpacingCase + Param::dimCase) + Param::borderSpacingCase + Param::dimCase / 2, 3*rayon, j*(2 * Param::borderSpacingCase + Param::dimCase) + Param::borderSpacingCase + Param::dimCase / 2);
 
 		glutSolidTeapot(3*rayon);

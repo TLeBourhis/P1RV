@@ -24,7 +24,7 @@ GLdouble Game::Ax = Param::getBoardDim("x") / 2; //coordonn�es de la cam�ra
 GLdouble Game::Ay = 100;
 GLdouble Game::Az = -80;
 
-Game::Game() {
+Game::Game() {	//Instancie Game
 	Param::init();
 	board = new Board();
 	currentInstance = this;
@@ -58,7 +58,8 @@ Game::~Game() {
 	delete this;
 }
 
-GLvoid Game::display() {
+//Méthode d'affichage générale, regroupe toutes les autres méthodes, centralise aussi le glutSwapBuffers
+GLvoid Game::display() {	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	board->display();
 	this->displayHUD();
@@ -68,6 +69,8 @@ GLvoid Game::display() {
 	glutSwapBuffers();
 }
 
+//Permet d'afficher une chaine de caractère, prend en argument la position du début d'affichage à l'écran,
+//la taille de la chaine, son contenu, et la couleur voulue du texte
 GLvoid Game::drawText(float x, float y, int length, const char *text, float colorR, float colorV, float colorB) {
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -87,6 +90,7 @@ GLvoid Game::drawText(float x, float y, int length, const char *text, float colo
 	glPopMatrix();
 }
 
+//Affichage des cartes (forme et texte)
 GLvoid Game::displayCards() {
 
 	glMatrixMode(GL_PROJECTION);
@@ -135,18 +139,19 @@ GLvoid Game::displayCards() {
 
 }
 
+//Affichage des boutons HELP et READY (forme et texte)
 GLvoid Game::displayButtons() {
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0.0f, Param::windowWidth, 0.0f, Param::windowHeight);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	glDisable(GL_DEPTH_TEST);
+
 	if (!readyToFight) {
-		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
-		glLoadIdentity();
-		gluOrtho2D(0.0f, Param::windowWidth, 0.0f, Param::windowHeight);
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
-		glLoadIdentity();
-
-		glDisable(GL_DEPTH_TEST);
-
 		glColor3f(0.8f, 0.8f, 0.8f);
 		glBegin(GL_QUADS);	
 		glVertex2f(Param::windowWidth - 180.0f, Param::windowHeight - 50.0f);
@@ -181,6 +186,8 @@ GLvoid Game::displayButtons() {
 	glPopMatrix();
 }
 
+//Affichage des informations textuelles
+//(golds et numéro du round)
 GLvoid Game::displayInfo() {
 	std::string goldText = "Gold : ";
 	goldText += std::to_string(getGold());
@@ -190,6 +197,9 @@ GLvoid Game::displayInfo() {
 	this->drawText(50.0f, Param::windowHeight - 70.0f, roundText.size(), roundText.data(), 1.0f, 1.0f, 1.0f);
 }
 
+//Regroupement de toutes les méthodes d'affichage 2D
+//à l'écran
+//Gestion d'affichage de la bulle d'aide et de l'écran de défaite
 GLvoid Game::displayHUD() {
 	displayInfo();
 	displayCards();
@@ -203,6 +213,9 @@ GLvoid Game::displayHUD() {
 	}
 }
 
+//Affichage de la bulle d'aide (forme et texte)
+//Donne les stattistiques de tous les champions présents
+//Potentiel changement aux seuls champions présents sur le board
 GLvoid Game::displayHelp() {
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -234,6 +247,13 @@ GLvoid Game::displayHelp() {
 		drawText(190.0f, Param::windowHeight - (250.0f + i * 30), message.size(), message.data(), 0.0f, 0.0f, 0.0f);
 		i++;
 	}
+	/*if (!board->getChampions().empty()) {
+		for (auto it = board->getChampions().begin(); it != board->getChampions().end(); it++) {
+			message = "" + (*it)->getName() + "  " + to_string((*it)->getArmor()) + "  " + to_string((*it)->getMagicResistance()) + "  " + to_string((*it)->getAttackRange()) + "  " + to_string((*it)->getHealth()) + "  " + to_string((*it)->getAttackDamage());
+			drawText(190.0f, Param::windowHeight - (250.0f + i * 30), message.size(), message.data(), 0.0f, 0.0f, 0.0f);
+			i++;
+		}
+	}*/
 
 	i++;
 
@@ -264,7 +284,8 @@ GLvoid Game::displayHelp() {
 	glPopMatrix();
 }
 
-
+//Affichage des races
+//Gestion visuelle du nombre de champions de même race et d'atteinte des seuils
 GLvoid Game::displayRaces() {
 	list<Race*> races = Game::currentInstance->getBoard()->getRaces();
 	int i = 0;
@@ -293,6 +314,7 @@ GLvoid Game::displayRaces() {
 	}
 }
 
+//Affichage de l'écran de défaite
 GLvoid Game::displayGameOver() {
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -328,10 +350,13 @@ GLvoid Game::displayGameOver() {
 	glPopMatrix();
 }
 
+//Méthode d'affichage utilisée dans le main
+//comme affichage général
 GLvoid Game::displayCallBack() {
 	Game::currentInstance->display();
 }
 
+//Definition de la fenêtre et de la caméra
 GLvoid Game::reshape(int w, int h) {
 	// On evite une division par 0
 	// la fenetre ne peut avoir une largeur de 0
@@ -363,6 +388,7 @@ GLvoid Game::reshape(int w, int h) {
 	glMatrixMode(GL_MODELVIEW);
 }
 
+//Gestion du clavier (touche echap seulement)
 void Game::clavier(unsigned char key, int xx, int yy) {
 	switch (key) {
 	case 27:
@@ -374,6 +400,8 @@ void Game::clavier(unsigned char key, int xx, int yy) {
 	}
 }
 
+//Gestion des clics souris
+//déclenchement des fonctions d'interaction avec l'utilisateur
 GLvoid Game::souris(int bouton, int etat, int x, int y) {
 	// Test pour voir si le bouton gauche de la souris est appuy�
 	//TODO
@@ -440,8 +468,9 @@ GLvoid Game::souris(int bouton, int etat, int x, int y) {
 	}
 }
 
+//Gestion du clic souris avec déplacement
+//Gestion du drag and drop
 GLvoid Game::deplacementSouris(int x, int y) {
-	cout << x << "," << y << endl;
 	//Projection des coordonnées de la souris sur le plan du board
 	GLdouble Bx, By, Bz; //coordon�es de a souris sur le plan de l'écran
 	GLdouble Mx, My, Mz, t; //point d'intersection du 'rayon' de la souris et du plan du board
@@ -474,7 +503,7 @@ GLvoid Game::deplacementSouris(int x, int y) {
 	glutPostRedisplay();
 }
 
-
+//Initialisation des cartes de champions
 void Game::setCards() {
 	list<Champion*>::iterator it;
 	srand(time(NULL));
@@ -487,6 +516,7 @@ void Game::setCards() {
 	}
 }
 
+//
 int Game::selectionCards(int x, int y) {
 	int k = -1;
 	if (x > 50 && y < Param::windowHeight - Param::cardHeightDown) {
@@ -501,9 +531,8 @@ int Game::selectionCards(int x, int y) {
 
 void Game::run() {
 	bool win = true;
-	while (!endGame && round < Param::nbRounds) {
+	while (!endGame && round <= Param::nbRounds) {
 		setCards();
-		cout << "Round : " << round << endl;
 		//Réinitialisation des variables
 		readyToFight = false;
 

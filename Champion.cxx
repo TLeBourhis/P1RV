@@ -88,6 +88,7 @@ void Champion::evolve(){
 }
 
 void Champion::reset(int _i, int _j) {
+	//Reinitialise le champion (stats et position)
 	alive = true;
 	health = initialHealth + Param::healthBonusByLevel * (level - 1);
 	maxHealth = health;
@@ -101,17 +102,19 @@ void Champion::reset(int _i, int _j) {
 }
 
 int Champion::buy(){
-
+	//gère le cout du champion pendant l'achat
   return -cost;
 }
 
 int Champion::sell(){
-
+	
   return cost*level;
 }
 
 
 void Champion::display() const{
+	//Affichage du champion
+	//Gere aussi l'affichage selon le niveau
 	if (alive) {
 		glMatrixMode(GL_MODELVIEW);
 
@@ -175,6 +178,7 @@ void Champion::move(Character *target){
 }
 
 int Champion::die(){
+	//Met l'état du champion à "mort"
 	this -> alive = false;
 	return 0;
 }

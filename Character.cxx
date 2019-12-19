@@ -40,6 +40,7 @@ Character::Character(std::string _name, int _armor, int _magicResistance, float 
 }
 
 void Character::reset(int _i, int _j) {
+	//Reinitialise le personnage (stats et position)
 	alive = true;
 	health = initialHealth;
 	maxHealth = initialHealth;
@@ -57,6 +58,7 @@ float Character::getColor(int i) const {
 };
 
 void Character::getHit(int damage, string type) {
+	//Gere la prise de dégâts par les personnages
 	if (type == "ATTACK_DAMAGE") {
 		int dmg = max(damage - armor, 5);
 		health -= dmg;
@@ -74,6 +76,7 @@ void Character::getHit(int damage, string type) {
 }
 
 float Character::distance(Character * c) const {
+	//Retourne la distance à un autre personnage donné
 	int _xc = c->i * (Param::dimCase + 2 * Param::borderSpacingCase) + Param::borderSpacingCase + Param::dimCase / 2;
 	int _yc = c->j * (Param::dimCase + 2 * Param::borderSpacingCase) + Param::borderSpacingCase + Param::dimCase / 2;
 	int _xme = this->i * (Param::dimCase + 2 * Param::borderSpacingCase) + Param::borderSpacingCase + Param::dimCase / 2;
@@ -82,6 +85,7 @@ float Character::distance(Character * c) const {
 }
 
 void Character::moveTo(int _x, int _y) {
+	//Déplace le personnage
 	this->x = _x;
  	this->y = _y;
 }
@@ -94,6 +98,8 @@ void Character::setColor() {
 }
 
 void Character::setIJ(int _i, int _j) {
+	//Définit la case sur laquelle doit se trouver le personnage
+	//et change sa position
 	i = _i;
 	j = _j;
 	x = i * (Param::dimCase + 2 * Param::borderSpacingCase) + Param::borderSpacingCase + Param::dimCase / 2;

@@ -105,7 +105,7 @@ void Monster::display() const{
 
 
 
-		glutSolidSphere(rayon, 20, 20);
+		glutSolidCube(1.8*rayon);
 
 		glPopMatrix();
 	}

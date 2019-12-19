@@ -17,8 +17,8 @@
 
 using namespace std;
 
-
 Board::Board() {
+	//Creation d'un Board en lui attribuant des cases
 	for (int i = 0; i < Param::nbRows; i++) {
 		for (int j = 0; j < Param::nbColumns; j++) {
 			cases.push_back(new Case(j, i));
@@ -27,12 +27,13 @@ Board::Board() {
 };
 
 list<Race*> Board::getRaces() {
+	//Accesseur Ã  la liste des races
 	list<Race*> races;
 	for (auto it = champions.begin(); it != champions.end(); it++) {
 		Champion * c = *it;
 		for (int i = 0; i <= 1; i++) {
 			if (find(races.begin(), races.end(), c->getRace(i)) == races.end()) {
-				//La race n'est pas déjà présente dans races
+				//La race n'est pas dÃ©jÃ  prÃ©sente dans races
 				races.push_back(c->getRace(i));
 			}
 		}
@@ -42,6 +43,7 @@ list<Race*> Board::getRaces() {
 }
 
 int Board::count(Race * const race) {
+	//
 	int count = 0;
 	list<string> champNames;
 	for (auto it = champions.begin(); it != champions.end(); it++) {
@@ -62,11 +64,12 @@ int Board::count(Race * const race) {
 }
 
 void Board::clearMonsters() {
-	//On efface l'ancienne liste de monstres
+	//Efface l'ancienne liste de monstres
 	monsters.clear();
 }
 
 void Board::reinitChampions() {
+	//Reinitialise les champions Ã  l'aide de la mÃ©thode reset
 	int i = 0;
 	int j = 0;
 	for (auto it = champions.begin(); it != champions.end(); it++) {
@@ -82,13 +85,13 @@ void Board::reinitChampions() {
 }
 
 void Board::applyRaceBonus() {
-	//Application des bonus de race
+	//Applique les bonus de races en appelant la mÃ©thode
+	//addBonus pour chaque champion concernÃ©
 	list<Race*> races = getRaces();
 	for (auto it = races.begin(); it != races.end(); it++) {
 		(*it)->addBonus(champions);
 	}
 }
-
 
 void Board::setMonsters(int round) {
 	//Ajoute les monstres pour ce round sur le board
@@ -99,16 +102,16 @@ void Board::setMonsters(int round) {
 }
 
 void Board::removeChampion(list<Champion*>::iterator it) {
-	//ATTENTION : ça peut delete l'objet sur lequel pointe le pointeur
+	//Retire un champions du board
+	//ATTENTION : Ã§a peut delete l'objet sur lequel pointe le pointeur
 	Game::garbageChampions.push_back(*it);
 	champions.erase(it);
 }
 
 void Board::addChampion(Champion * champion) {
-	//ATTENTION on ne peut pas avoir 2 PE indépendants pour l'instant
-	//Test pour l'évolution
+	//Ajoute un champion sur le board
 
-	//On compte le nombre de champion du même type sur le board
+	//On compte le nombre de champion du mÃªme type sur le board
 	int count = 0;
 	list<list<Champion*>::iterator> listIteratorToDelete;
 	if (champion->getLevel() != Param::levelMax) {
@@ -122,7 +125,7 @@ void Board::addChampion(Champion * champion) {
 		}
 	}
 
-	//Ajout des nouveaux champions sur le board à un emplacement vide
+	//Ajout des nouveaux champions sur le board Ã  un emplacement vide
 	Champion * newChampion = new Champion(champion);
 	int i = newChampion->getI();
 	int j = newChampion->getJ();
@@ -136,7 +139,7 @@ void Board::addChampion(Champion * champion) {
 		}
 	}
 
-	//Si on a déjà deux champions du même type sur le board alors on delete les champions sur le board et on evolve le nouveau
+	//Si on a dÃ©jÃ  deux champions du mÃªme type sur le board alors on delete les champions sur le board et on evolve le nouveau
 	if (count == 2) {
 		for (auto it = listIteratorToDelete.begin(); it != listIteratorToDelete.end(); it++) {
 			this->removeChampion(*it);
@@ -151,7 +154,8 @@ void Board::addChampion(Champion * champion) {
 }
 
 Champion* Board::findChampion(int _i, int _j) {
-	//Retourne le pointer vers le champion présent sur la case i,j
+	//Cherche si un champion se trouve sur case d'indices pris en arguments
+	//et retourne un pointeur vers celui-ci si c'est le cas
 	Champion* champ = nullptr;
 	for (list<Champion*>::iterator itr = champions.begin(); itr != champions.end(); itr++) {
 		if ((*itr)->getI() == _i && (*itr)->getJ() == _j) {
@@ -162,6 +166,8 @@ Champion* Board::findChampion(int _i, int _j) {
 }
 
 Character* Board::findCharacter(int _i, int _j) {
+	//Cherche si un character se trouve sur case d'indices pris en arguments
+	//et retourne un pointeur vers celui-ci si c'est le cas
 	Character * c = (Character*)findChampion(_i, _j);
 
 	if (c == nullptr) {
@@ -185,7 +191,7 @@ Character* Board::findCharacter(int _i, int _j) {
 
 
 bool Board::fight(){
-	//Gère le fight sur le board lors d'un round
+	//GÃ¨re le fight sur le board lors d'un round
 	bool win = false;
 
 	
@@ -199,7 +205,7 @@ bool Board::fight(){
 		fightingMonsters.push_back((Character*)(*it));
 	}
 	while (fightingChampions.empty() == false && fightingMonsters.empty() == false) {
-		//Tant que l'un des camps n'est pas décédé on les fait se combattre
+		//Tant que l'un des camps n'est pas dÃ©cÃ©dÃ© on les fait se combattre
 
 		for (auto it = fightingChampions.begin(); it != fightingChampions.end(); it++) {
 			(*it)->fight(fightingChampions, fightingMonsters);
@@ -229,7 +235,7 @@ bool Board::fight(){
 
 	}
 
-	//Vérification de la victoire
+	//VÃ©rification de la victoire
 	win = !fightingChampions.empty();
 
 	
@@ -239,6 +245,8 @@ bool Board::fight(){
 
 
 GLvoid Board::display(){
+	//Affiche un board en affichant d'abord le plateau puis les cases
+	//une par une en appelant leur fonction d'affichage
   // Effacement du frame buffer
   //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

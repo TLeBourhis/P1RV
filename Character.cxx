@@ -57,18 +57,20 @@ float Character::getColor(int i) const {
 };
 
 void Character::getHit(int damage, string type) {
-	if (type == "ATTACK_DAMAGE") {
-		int dmg = max(damage - armor, 5);
-		health -= dmg;
-		if (health <= 0) {
-			Game::currentInstance->addGold(this->die());
+	if (this->isAlive()) {
+		if (type == "ATTACK_DAMAGE") {
+			int dmg = max(damage - armor, 5);
+			health -= dmg;
+			if (health <= 0) {
+				Game::currentInstance->addGold(this->die());
+			}
 		}
-	}
-	else {
-		int dmg = max(damage - magicResistance, 5);
-		health -= dmg;
-		if (health <= 0) {
-			Game::currentInstance->addGold(this->die());
+		else {
+			int dmg = max(damage - magicResistance, 5);
+			health -= dmg;
+			if (health <= 0) {
+				Game::currentInstance->addGold(this->die());
+			}
 		}
 	}
 }

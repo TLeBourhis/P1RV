@@ -74,7 +74,12 @@ void Champion::fight(list<Character*> allies, list<Character*> ennemies){
 		}
 		else {
 			//Attaque de l'ennemi
-			nearestEnnemy->getHit(attackDamage, "ATTACK_DAMAGE");
+			if (attackDamage > 0) {
+				nearestEnnemy->getHit(attackDamage, "ATTACK_DAMAGE");
+			}
+			if (spellPower > 0) {
+				nearestEnnemy->getHit(spellPower, "MAGIC_DAMAGE");
+			}
 		}
 	}
 	

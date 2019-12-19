@@ -16,6 +16,7 @@ Race::Race(string _name, int _bT1, int _bT2, string _b1, string _b2) {
 }
 
 void Race::addBonus(list<Champion*> champions) const {
+	//Gère les bonus à prendre en compte, avec les différents seuils
 	list<Champion*> champs = this->getChampionsFromRace(champions);
 	int n = count(champs);
 	if (n >= bonusTreshold[0]) {
@@ -53,11 +54,12 @@ int Race::count(list<Champion*> champions) const {
 }
 
 void Race::addBonusTo(Champion * c, int i) const {
+	//Ajoute les bonnus de races aux champions concernés
 	string add = bonus[i].substr(0, bonus[i].find(" "));
 	string caracteristic = bonus[i].substr(bonus[i].find(" ") + 1, bonus[i].size());
 
 
-	//D�termination du caracteristic
+	//Détermination du caracteristic
 	if (caracteristic == "armor") {
 		c->addArmor(std::stoi(add));
 	}
@@ -82,6 +84,7 @@ void Race::addBonusTo(Champion * c, int i) const {
 }
 
 list<Champion*> Race::getChampionsFromRace(list<Champion*> champions) const {
+	//Retourne la liste des champions d'une même race
 	list<Champion*> champs;
 	for (auto it = champions.begin(); it != champions.end(); it++) {
 		if ((*it)->getRace(0) == this || (*it)->getRace(1) == this) {

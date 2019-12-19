@@ -13,7 +13,7 @@ Boss::Boss(string _name, int _armor, int _magicResistance, float _spellPower, in
 };
 
 void Boss::fight(list<Character*> allies, list<Character*> ennemies){
-	//Gère les actions du champion lors du combat.
+	//Gère les actions du boss lors du combat.
 
 	this_thread::sleep_for(chrono::milliseconds(Param::sleepTime));
 
@@ -66,6 +66,7 @@ void Boss::fight(list<Character*> allies, list<Character*> ennemies){
 
 
 void Boss::spell1(list<Character*> ennemies){
+	//Gère le lancer de sort
   //Inflige des dégâts à tous les ennemis qui sont suffisamment proches du boss
 
   int spellRange = 2; //ATTENTION : Mettre ce paramètre dans Param
@@ -100,7 +101,8 @@ void Boss::spell1(list<Character*> ennemies){
   }
 }
 
-void Boss::display() const {
+
+void Boss::display() const{
 	if (alive) {
 		glMatrixMode(GL_MODELVIEW);
 
@@ -112,9 +114,10 @@ void Boss::display() const {
 
 
 		float rayon = (float)health / (float)maxHealth * 4 + 1;
-		glTranslatef(i*(2 * Param::borderSpacingCase + Param::dimCase) + Param::borderSpacingCase + Param::dimCase / 2, 3 * rayon, j*(2 * Param::borderSpacingCase + Param::dimCase) + Param::borderSpacingCase + Param::dimCase / 2);
 
-		glutSolidTeapot(3 * rayon);
+		glTranslatef(i*(2 * Param::borderSpacingCase + Param::dimCase) + Param::borderSpacingCase + Param::dimCase / 2, 3*rayon, j*(2 * Param::borderSpacingCase + Param::dimCase) + Param::borderSpacingCase + Param::dimCase / 2);
+
+		glutSolidTeapot(3*rayon);
 
 		glPopMatrix();
 	}

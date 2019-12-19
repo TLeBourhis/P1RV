@@ -16,9 +16,8 @@ Monster::Monster(string _name, int _armor, int _magicResistance, float _spellPow
 }
 
 void Monster::fight(list<Character*> allies, list<Character*> ennemies){
-
 	this_thread::sleep_for(chrono::milliseconds(Param::sleepTime));
-	//Gère les actions du champion lors du combat.
+	//Gère les actions du monstre lors du combat.
 
 
 	if (ennemies.size() == 0) {
@@ -69,6 +68,7 @@ void Monster::boostedAttack(Character *champion) const{
 
 
 int Monster::die(){
+	//Gère la mort du monstre
   this->alive = false;
   return gold;
 }
@@ -90,6 +90,7 @@ void Monster::move(Character *target){
 };
 
 void Monster::display() const{
+	//Affichage du monstre
 	if (alive) {
 		glMatrixMode(GL_MODELVIEW);
 
